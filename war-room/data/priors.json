@@ -1,0 +1,602 @@
+{
+  "lastUpdated": "2026-03-08T06:00:00Z",
+  "changeThreshold": 0.10,
+  "priors": {
+    "E1": {
+      "probabilities": {"Yes": 0.35, "No": 0.65},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Tariff policies create recession risk, but NBER typically declares recessions with long lag. Elevated but not majority probability.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E2": {
+      "probabilities": {"Yes": 0.30, "No": 0.70},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Tariffs are inflationary but 3.5% is a high threshold. CPI more likely to land in 2.5-3.5% range. Fed would respond hawkishly.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E3": {
+      "probabilities": {"Yes": 0.40, "No": 0.60},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Fed cut three times in late 2024 but tariff-driven inflation complicates the path. Two cuts plausible but faces headwinds.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E4": {
+      "probabilities": {"Yes": 0.40, "No": 0.60},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Crude faces downward pressure from trade wars and increased US production. Slight lean toward lower end-of-year prices.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E5": {
+      "probabilities": {"Yes": 0.50, "No": 0.50},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: True coin-flip. S&P started near ATH. Tariff uncertainty vs AI earnings growth and historical 70% base rate for positive years.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E6": {
+      "probabilities": {"Yes": 0.25, "No": 0.75},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Unemployment around 4.1-4.2% in late 2024. Reaching 4.5% requires meaningful deterioration. Labor market has been remarkably resilient.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E7": {
+      "probabilities": {"Yes": 0.30, "No": 0.70},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Rates ended 2024 around 6.7-6.9%. More likely to hover in 6.0-7.0% range. Slowing economy and potential Fed cuts create downward pressure.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E8": {
+      "probabilities": {"Yes": 0.50, "No": 0.50},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Bitcoin near $100K in late 2024. Crypto-friendly regulation supports, but extreme volatility makes year-end level genuinely uncertain.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P1": {
+      "probabilities": {"Yes": 1.0, "No": 0.0},
+      "source": "resolved",
+      "marketSource": null,
+      "reasoning": "RESOLVED: Government shutdown occurred in 2026.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": false
+    },
+    "P2": {
+      "probabilities": {"Yes": 0.65, "No": 0.35},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: 6-3 conservative SCOTUS with cases on agency deference, immigration enforcement, and removal power. Trump admin actively pushing boundaries.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P3": {
+      "probabilities": {"Yes": 0.20, "No": 0.80},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Federal cases dropped post-election. Georgia case faces procedural delays. A final judgment in 2026 is unlikely given procedural posture.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P4": {
+      "probabilities": {"Yes": 0.15, "No": 0.85},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Criminal convictions take years to develop. A full conviction within 2026 is a high bar. Historical base rate is low.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P5": {
+      "probabilities": {"Yes": 1.0, "No": 0.0},
+      "source": "resolved",
+      "marketSource": null,
+      "reasoning": "RESOLVED: Cabinet/senior WH official resigned or was fired in 2026.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": false
+    },
+    "P6": {
+      "probabilities": {"Yes": 0.10, "No": 0.90},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Requires bipartisan cooperation (unlikely) or reconciliation (limited). Slim House majority makes partisan legislation difficult. Decades of legislative failure on immigration.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P7": {
+      "probabilities": {"Yes": 0.35, "No": 0.65},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: President's party almost always loses House seats in midterms. Slim GOP majority (~220-215). Historical average loss is 25+ seats.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P8": {
+      "probabilities": {"Yes": 0.70, "No": 0.30},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Republicans won strong Senate majority in 2024 (~53-47). 2026 map is more balanced. Flipping enough seats is structurally difficult.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A1": {
+      "probabilities": {"Yes": 0.55, "No": 0.45},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: ChatGPT had ~400M MAU in early 2025, growing rapidly. Meta AI embedded in WhatsApp/Instagram is the most likely path to 500M WAU.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A2": {
+      "probabilities": {"Yes": 0.50, "No": 0.50},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Character.AI and Replika show strong downloads but sustaining top-10 against TikTok/Instagram is very hard. A viral moment could spike for one month.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A3": {
+      "probabilities": {"Yes": 0.55, "No": 0.45},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Deepfakes already impacted elections and financial scams globally. Technology improving rapidly. High bar but increasingly probable.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A4": {
+      "probabilities": {"Yes": 0.82, "No": 0.18},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: EU AI Act transparency obligations scheduled for implementation. China already requires AI content labeling. Very likely in at least one major jurisdiction.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A5": {
+      "probabilities": {"Yes": 0.10, "No": 0.90},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Billboard has excluded purely AI-generated content. Industry resistance strong. Being widely verified as AI-created contradicts incentives for chart success.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A6": {
+      "probabilities": {"Yes": 0.60, "No": 0.40},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Character.AI teen safety controversy generated congressional attention. Political salience of AI companion risks to children makes this moderately likely.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F1": {
+      "probabilities": {"A": 0.08, "B": 0.25, "C": 0.15, "D": 0.30, "E": 0.15, "F": 0.07},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Wikipedia top pages skew toward celebrity deaths, sports, and pop culture. 2026 FIFA World Cup in North America gives Sports/Entertainment (D) an edge.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F2": {
+      "probabilities": {"A": 0.30, "B": 0.10, "C": 0.12, "D": 0.28, "E": 0.08, "F": 0.12},
+      "source": "assessment",
+      "marketSource": null,
+  "lastUpdated": "2026-03-08T06:00:00Z",
+  "changeThreshold": 0.10,
+  "priors": {
+    "E1": {
+      "probabilities": {"Yes":0.35,"No":0.65},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Tariff policies create recession risk, but NBER typically declares recessions with long lag.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E2": {
+      "probabilities": {"Yes":0.3,"No":0.7},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Tariffs are inflationary but 3.5% is a high threshold. CPI more likely to land in 2.5-3.5% range.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E3": {
+      "probabilities": {"Yes":0.4,"No":0.6},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Fed cut three times in late 2024 but tariff-driven inflation complicates the path. Two cuts plausible but faces headwinds.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E4": {
+      "probabilities": {"Yes":0.4,"No":0.6},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Crude faces downward pressure from trade wars and increased US production.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E5": {
+      "probabilities": {"Yes":0.5,"No":0.5},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: True coin-flip. S&P started near ATH. Tariff uncertainty vs AI earnings growth and historical 70% base rate.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E6": {
+      "probabilities": {"Yes":0.25,"No":0.75},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Unemployment around 4.1-4.2% in late 2024. Reaching 4.5% requires meaningful deterioration.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E7": {
+      "probabilities": {"Yes":0.3,"No":0.7},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Rates ended 2024 around 6.7-6.9%. More likely to hover in 6.0-7.0% range.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "E8": {
+      "probabilities": {"Yes":0.5,"No":0.5},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Bitcoin near $100K in late 2024. Crypto-friendly regulation supports, but extreme volatility.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P1": {
+      "probabilities": {"Yes":1,"No":0},
+      "source": "resolved",
+      "marketSource": null,
+      "reasoning": "RESOLVED: Government shutdown occurred in 2026.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": false
+    },
+    "P2": {
+      "probabilities": {"Yes":0.65,"No":0.35},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: 6-3 conservative SCOTUS with cases on agency deference and removal power.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P3": {
+      "probabilities": {"Yes":0.2,"No":0.8},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Federal cases dropped post-election. Georgia case faces procedural delays.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P4": {
+      "probabilities": {"Yes":0.15,"No":0.85},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Criminal convictions take years to develop. A full conviction within 2026 is a high bar.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P5": {
+      "probabilities": {"Yes":1,"No":0},
+      "source": "resolved",
+      "marketSource": null,
+      "reasoning": "RESOLVED: Cabinet/senior WH official resigned or was fired in 2026.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": false
+    },
+    "P6": {
+      "probabilities": {"Yes":0.1,"No":0.9},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Requires bipartisan cooperation. Slim House majority makes partisan legislation difficult.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P7": {
+      "probabilities": {"Yes":0.35,"No":0.65},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: President party almost always loses House seats in midterms. Slim GOP majority.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "P8": {
+      "probabilities": {"Yes":0.7,"No":0.3},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Republicans won strong Senate majority in 2024. 2026 map is more balanced.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A1": {
+      "probabilities": {"Yes":0.55,"No":0.45},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: ChatGPT had ~400M MAU in early 2025. Meta AI embedded in WhatsApp/Instagram is the most likely path to 500M WAU.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A2": {
+      "probabilities": {"Yes":0.5,"No":0.5},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Character.AI and Replika show strong downloads but sustaining top-10 is very hard.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A3": {
+      "probabilities": {"Yes":0.55,"No":0.45},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Deepfakes already impacted elections and financial scams globally. Technology improving rapidly.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A4": {
+      "probabilities": {"Yes":0.82,"No":0.18},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: EU AI Act transparency obligations scheduled for implementation. China already requires AI content labeling.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A5": {
+      "probabilities": {"Yes":0.1,"No":0.9},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Billboard has excluded purely AI-generated content. Industry resistance strong.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "A6": {
+      "probabilities": {"Yes":0.6,"No":0.4},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Character.AI teen safety controversy generated congressional attention.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F1": {
+      "probabilities": {"A":0.08,"B":0.25,"C":0.15,"D":0.3,"E":0.15,"F":0.07},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Wikipedia top pages skew toward celebrity deaths, sports, and pop culture. 2026 FIFA World Cup gives Sports (D) an edge.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F2": {
+      "probabilities": {"A":0.3,"B":0.1,"C":0.12,"D":0.28,"E":0.08,"F":0.12},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Midterm elections dominate U.S. search trends. 2026 FIFA World Cup on home soil could rival.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F3": {
+      "probabilities": {"A":0.3,"B":0.25,"C":0.15,"D":0.08,"E":0.07,"F":0.15},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: MW Word of the Year reflects lookup surges. AI terminology entering public vocabulary makes Tech/AI (A) strong.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F4": {
+      "probabilities": {"A":0.6,"B":0.25,"C":0.15},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Time POTY has historically favored individuals (~70%). Individual remains strong base rate.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F5": {
+      "probabilities": {"Yes":0.45,"No":0.55},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Major outlets incrementally updating AI policies. Requiring specific outlets to publish prominent policy is possible but legacy institutions move slowly.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "F6": {
+      "probabilities": {"Yes":0.35,"No":0.65},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: High bar requiring single AI event to trigger reactions across 3+ institutional domains within 30 days.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "R1": {
+      "probabilities": {"A":0.3,"B":0.55,"C":0.15},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Long-run trend is ~0.2-0.3pp annual decline. Modest decline or flat (B) most likely.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "R2": {
+      "probabilities": {"A":0.25,"B":0.55,"C":0.2},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Historical trend ~1.0-1.5 per 1000 annual decline, but decelerating. Modest decline (B) most likely.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "R3": {
+      "probabilities": {"A":0.45,"B":0.4,"C":0.15},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Post-COVID life expectancy recovery has been strong. Modest increase (A) plausible but flat (B) increasingly likely.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "R4": {
+      "probabilities": {"A":0.2,"B":0.45,"C":0.35},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Recent years show elevated CO2 growth. Neutral pattern should moderate toward 2.0-2.8 (B).",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "R5": {
+      "probabilities": {"A":0.75,"B":0.2,"C":0.05},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Renewables share increasing ~1.5-2.0pp annually. Massive solar/wind deployment. A 1.0+ pp increase (A) is the strong favorite.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "S1": {
+      "probabilities": {"Seahawks":1},
+      "source": "resolved",
+      "marketSource": null,
+      "reasoning": "RESOLVED: Seahawks won the Super Bowl.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": false
+    },
+    "S2": {
+      "probabilities": {"Thunder":0.22,"Celtics":0.14,"Pistons":0.01,"Other":0.63},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Thunder were consensus preseason favorites with SGA/Chet core. Pistons a deep longshot.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "S3": {
+      "probabilities": {"Avalanche":0.12,"Other":0.88},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Avalanche are perennial contenders. Even a top-3 favorite has ~10-15% chance given NHL playoff parity.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "S4": {
+      "probabilities": {"Yes":0.55,"No":0.45},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: 2026 World Cup hosted in US. Expanded 48-team format. Home advantage makes QF realistic but not certain.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "S5": {
+      "probabilities": {"B":1},
+      "source": "resolved",
+      "marketSource": null,
+      "reasoning": "RESOLVED: Super Bowl total points fell in the 41-54 range (B).",
+      "lastChanged": "2026-03-08",
+      "changeFlag": false
+    },
+    "G1J": {
+      "probabilities": {"Yes":0.35,"No":0.65},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Justin lost 90lbs, actively training. A 6:00 mile is serious and requires dedicated run-specific training.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "G2J": {
+      "probabilities": {"Yes":0.4,"No":0.6},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Nicotine cessation relapse rates are 60-80% in first year. Justin has extraordinary discipline but nicotine is uniquely difficult.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "G1BA": {
+      "probabilities": {"Yes":0.55,"No":0.45},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: 5,000 pages is ~14 pages/day. Achievable for a motivated reader.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "G2BA": {
+      "probabilities": {"Yes":0.3,"No":0.7},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: Quitting daily news consumption is hard. News is designed to be addictive, especially during midterm election season.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "G1BE": {
+      "probabilities": {"Yes":0.45,"No":0.55},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: A century ride is achievable with 3-6 months dedicated training.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    },
+    "G2BE": {
+      "probabilities": {"Yes":0.55,"No":0.45},
+      "source": "assessment",
+      "marketSource": null,
+      "reasoning": "Initial assessment: 100 sober nights is ~27% of the year. A moderate goal that does not require total sobriety.",
+      "lastChanged": "2026-03-08",
+      "changeFlag": true
+    }
+  },
+  "snapshots": [
+    {
+      "date": "2026-03-08",
+      "priors": {
+        "E1": {"Yes":0.35,"No":0.65},
+        "E2": {"Yes":0.3,"No":0.7},
+        "E3": {"Yes":0.4,"No":0.6},
+        "E4": {"Yes":0.4,"No":0.6},
+        "E5": {"Yes":0.5,"No":0.5},
+        "E6": {"Yes":0.25,"No":0.75},
+        "E7": {"Yes":0.3,"No":0.7},
+        "E8": {"Yes":0.5,"No":0.5},
+        "P1": {"Yes":1,"No":0},
+        "P2": {"Yes":0.65,"No":0.35},
+        "P3": {"Yes":0.2,"No":0.8},
+        "P4": {"Yes":0.15,"No":0.85},
+        "P5": {"Yes":1,"No":0},
+        "P6": {"Yes":0.1,"No":0.9},
+        "P7": {"Yes":0.35,"No":0.65},
+        "P8": {"Yes":0.7,"No":0.3},
+        "A1": {"Yes":0.55,"No":0.45},
+        "A2": {"Yes":0.5,"No":0.5},
+        "A3": {"Yes":0.55,"No":0.45},
+        "A4": {"Yes":0.82,"No":0.18},
+        "A5": {"Yes":0.1,"No":0.9},
+        "A6": {"Yes":0.6,"No":0.4},
+        "F1": {"A":0.08,"B":0.25,"C":0.15,"D":0.3,"E":0.15,"F":0.07},
+        "F2": {"A":0.3,"B":0.1,"C":0.12,"D":0.28,"E":0.08,"F":0.12},
+        "F3": {"A":0.3,"B":0.25,"C":0.15,"D":0.08,"E":0.07,"F":0.15},
+        "F4": {"A":0.6,"B":0.25,"C":0.15},
+        "F5": {"Yes":0.45,"No":0.55},
+        "F6": {"Yes":0.35,"No":0.65},
+        "R1": {"A":0.3,"B":0.55,"C":0.15},
+        "R2": {"A":0.25,"B":0.55,"C":0.2},
+        "R3": {"A":0.45,"B":0.4,"C":0.15},
+        "R4": {"A":0.2,"B":0.45,"C":0.35},
+        "R5": {"A":0.75,"B":0.2,"C":0.05},
+        "S1": {"Seahawks":1},
+        "S2": {"Thunder":0.22,"Celtics":0.14,"Pistons":0.01,"Other":0.63},
+        "S3": {"Avalanche":0.12,"Other":0.88},
+        "S4": {"Yes":0.55,"No":0.45},
+        "S5": {"B":1},
+        "G1J": {"Yes":0.35,"No":0.65},
+        "G2J": {"Yes":0.4,"No":0.6},
+        "G1BA": {"Yes":0.55,"No":0.45},
+        "G2BA": {"Yes":0.3,"No":0.7},
+        "G1BE": {"Yes":0.45,"No":0.55},
+        "G2BE": {"Yes":0.55,"No":0.45}
+      },
+      "evScores": {"justin": 130.0, "barry": 134.8, "ben": 81.8},
+      "changes": ["Initial probability assessment for all 44 questions"]
+    }
+  ]
+}
