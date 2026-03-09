@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bayesian War Room — 2026 Prediction Game</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0f1729;
+    --surface: #1a2332;
+    --surface2: #243044;
+    --border: #2d3f5a;
+    --text: #e8edf5;
+    --text-muted: #8899b3;
+    --accent: #4a90d9;
+    --gold: #f5a623;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --justin: #4a90d9;
+    --barry: #e67e22;
+    --ben: #2ecc71;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  /* Header */
+  .header { text-align: center; padding: 40px 20px 30px; }
+  .header h1 { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #e74c3c, #f5a623, #4a90d9);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-top: 8px; font-style: italic; }
+  .header .year-badge { display: inline-block; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 16px; font-size: 0.8rem; color: var(--gold); margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace; }
+
+  /* Podium */
+  .podium { display: flex; justify-content: center; align-items: flex-end; gap: 16px; margin: 30px 0 40px; }
+  .podium-slot { text-align: center; border-radius: 16px 16px 0 0; padding: 20px 24px 16px;
+    position: relative; transition: transform 0.3s; min-width: 180px; }
+  .podium-slot:hover { transform: translateY(-4px); }
+  .podium-slot.first { background: linear-gradient(180deg, rgba(245,166,35,0.15), rgba(245,166,35,0.05));
+    border: 1px solid rgba(245,166,35,0.3); order: 2; padding-bottom: 40px; }
+  .podium-slot.second { background: linear-gradient(180deg, rgba(192,192,192,0.12), rgba(192,192,192,0.04));
+    border: 1px solid rgba(192,192,192,0.2); order: 1; padding-bottom: 24px; }
+  .podium-slot.third { background: linear-gradient(180deg, rgba(205,127,50,0.12), rgba(205,127,50,0.04));
+    border: 1px solid rgba(205,127,50,0.2); order: 3; padding-bottom: 16px; }
+  .rank-badge { font-size: 1.6rem; margin-bottom: 4px; }
+  .podium-name { font-size: 1.3rem; font-weight: 800; margin: 4px 0; }
+  .podium-score { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; }
+  .podium-detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+  .podium-actual { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; margin-top: 6px; padding: 3px 10px; border-radius: 6px; display: inline-block; }
+
+  /* Stats bar */
+  .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 30px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; text-align: center; }
+  .stat-card .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 6px; }
+  .stat-card .value { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 700; }
+
+  /* Section headers */
+  .section-header { font-size: 1.1rem; font-weight: 700; margin: 30px 0 16px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border); }
+
+  /* Tabs */
+  .tab-bar { display: flex; gap: 4px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; flex-wrap: wrap; }
+  .tab-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 16px; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; white-space: nowrap; font-family: 'Inter', sans-serif; }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* EV Breakdown Table */
+  .ev-table-wrap { overflow-x: auto; margin-bottom: 30px; }
+  .ev-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .ev-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border);
+    color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+    position: sticky; top: 0; background: var(--bg); }
+  .ev-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .ev-table tr:hover td { background: var(--surface); }
+  .ev-table .q-id { font-family: 'JetBrains Mono', monospace; color: var(--accent);
+    background: rgba(74,144,217,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+  .ev-table .prob-bar { display: inline-block; height: 6px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .ev-table .prob-text { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+  .ev-table .ev-cell { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.85rem; }
+  .ev-pos { color: var(--green); }
+  .ev-neg { color: var(--red); }
+  .ev-zero { color: var(--text-muted); }
+  .ev-resolved { color: var(--gold); font-style: italic; }
+  .pick-cell { font-size: 0.8rem; }
+  .pick-cell .pick-val { font-weight: 700; }
+  .pick-cell .pick-detail { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+  .source-badge { font-size: 0.65rem; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
+  .source-badge.market { background: rgba(74,144,217,0.15); color: var(--accent); }
+  .source-badge.assessment { background: rgba(245,166,35,0.15); color: var(--gold); }
+  .source-badge.blended { background: rgba(46,204,113,0.15); color: var(--green); }
+
+  /* Change Log */
+  .change-log { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; margin-bottom: 30px; }
+  .change-log h3 { font-size: 1rem; margin-bottom: 16px; color: var(--gold); }
+  .change-entry { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .change-entry:last-child { border-bottom: none; }
+  .change-entry .change-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .change-entry .change-qid { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent); }
+  .change-entry .change-delta { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; }
+  .change-entry .change-reasoning { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-top: 4px; }
+  .change-entry .change-date { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+  .no-changes { color: var(--text-muted); font-style: italic; font-size: 0.9rem; }
+
+  /* Chart */
+  .chart-container { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; margin-bottom: 30px; }
+  .chart-container h3 { font-size: 1rem; margin-bottom: 16px; color: var(--text-muted); }
+  .chart-container canvas { width: 100% !important; max-height: 300px; }
+
+  /* Risk Profile Cards */
+  .risk-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 30px; }
+  .risk-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .risk-card h4 { font-size: 0.9rem; margin-bottom: 12px; }
+  .risk-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .risk-stat:last-child { border-bottom: none; }
+  .risk-stat .val { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.8rem; }
+
+  /* Loading */
+  .loading { text-align: center; padding: 60px; color: var(--text-muted); }
+  .loading .spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .podium { flex-direction: column; align-items: center; }
+    .podium-slot { order: unset !important; width: 100%; max-width: 300px; border-radius: 12px; }
+    .header h1 { font-size: 1.5rem; }
+    .ev-table { font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Bayesian War Room</h1>
+    <div class="subtitle">Expected value analysis for the 2026 Prediction Game</div>
+    <div class="year-badge">SEASON 1 &bull; 2026 &bull; UPDATED <span id="last-updated">...</span></div>
+  </div>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p style="margin-top:16px;">Loading probability data...</p>
+  </div>
+
+  <div id="app" style="display:none;">
+    <div id="podium" class="podium"></div>
+    <div id="stats-bar" class="stats-bar"></div>
+
+    <div id="chart-section" class="chart-container">
+      <h3>EV Trajectory Over Time</h3>
+      <canvas id="ev-chart"></canvas>
+    </div>
+
+    <div id="change-log" class="change-log">
+      <h3>Recent Probability Shifts</h3>
+      <div id="change-entries"></div>
+    </div>
+
+    <div class="section-header">EV Breakdown by Question</div>
+    <div class="tab-bar" id="tab-bar"></div>
+    <div class="ev-table-wrap">
+      <table class="ev-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Question</th>
+            <th>P(Yes/Fav)</th>
+            <th>Src</th>
+            <th style="color:var(--justin)">Justin</th>
+            <th style="color:var(--barry)">Barry</th>
+            <th style="color:var(--ben)">Ben</th>
+          </tr>
+        </thead>
+        <tbody id="ev-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-header">EV Risk Profiles</div>
+    <div id="risk-section" class="risk-section"></div>
+
+    <div class="footer">
+      <p>Bayesian War Room &mdash; 2026 Prediction Game</p>
+      <p style="margin-top:4px;">Justin, Barry &amp; Ben</p>
+      <p style="margin-top:8px; font-size:0.7rem;">Probabilities updated weekly. Sources: prediction markets + assessment.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONSTANTS
+// ============================================================
+const PLAYERS = ['justin', 'barry', 'ben'];
+const PLAYER_NAMES = { justin: 'Justin', barry: 'Barry', ben: 'Ben' };
+const PLAYER_COLORS = { justin: '#4a90d9', barry: '#e67e22', ben: '#2ecc71' };
+const CONF_LABELS = { 1: '55%', 2: '65%', 3: '75%', 4: '85%', 5: '95%' };
+const CATEGORIES = ['Economy', 'Politics', 'AI & Tech', 'Chaos & Culture', 'Planet & Health', 'Sports', 'Personal Goals'];
+
+let GAME_DATA = null;
+let PRIORS = null;
+
+// ============================================================
+// DATA LOADING
+// ============================================================
+async function loadData() {
+  try {
+    const [gameResp, priorsResp] = await Promise.all([
+      fetch('data/game-data.json'),
+      fetch('data/priors.json')
+    ]);
+    GAME_DATA = await gameResp.json();
+    PRIORS = await priorsResp.json();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    render();
+  } catch (err) {
+    document.getElementById('loading').innerHTML =
+      '<p style="color:var(--red);">Error loading data. Make sure you are running a local server.</p>' +
+      '<p style="color:var(--text-muted);margin-top:8px;font-size:0.85rem;">' + err.message + '</p>';
+  }
+}
+
+// ============================================================
+// EV ENGINE
+// ============================================================
+function calcActualScore(q, player) {
+  if (!q.result) return 0;
+  const p = q[player];
+  const correct = p.pick.toLowerCase() === q.result.toLowerCase();
+  return correct ? p.stake * p.mult : -(p.stake * p.mult);
+}
+
+function getPlayerPickProb(q, player) {
+  const prior = PRIORS.priors[q.id];
+  if (!prior) return 0.5;
+  const pick = q[player].pick;
+  if (q.result) {
+    return pick.toLowerCase() === q.result.toLowerCase() ? 1.0 : 0.0;
+  }
+  const probs = prior.probabilities;
+  if (probs[pick] !== undefined) return probs[pick];
+  const pickLower = pick.toLowerCase();
+  for (const [key, val] of Object.entries(probs)) {
+    if (key.toLowerCase() === pickLower) return val;
+  }
+  return 0.5;
+}
+
+function calcEV(q, player) {
+  if (q.result) return calcActualScore(q, player);
+  const pCorrect = getPlayerPickProb(q, player);
+  const wager = q[player].stake * q[player].mult;
+  return wager * (2 * pCorrect - 1);
+}
+
+function getPlayerTotalEV(player) {
+  return GAME_DATA.questions.reduce((sum, q) => sum + calcEV(q, player), 0);
+}
+
+function getPlayerActualScore(player) {
+  return GAME_DATA.questions.filter(q => q.result).reduce((sum, q) => sum + calcActualScore(q, player), 0);
+}
+
+function getPlayerCatEV(player, cat) {
+  return GAME_DATA.questions.filter(q => q.cat === cat).reduce((sum, q) => sum + calcEV(q, player), 0);
+}
+
+function getPlayerStats(player) {
+  const qs = GAME_DATA.questions;
+  const resolved = qs.filter(q => q.result);
+  let correct = 0;
+  resolved.forEach(q => { if (calcActualScore(q, player) > 0) correct++; });
+  const totalEV = getPlayerTotalEV(player);
+  const actualScore = getPlayerActualScore(player);
+  const unresolvedEV = totalEV - actualScore;
+  const maxExposure = Math.max(...qs.filter(q => !q.result).map(q => q[player].stake * q[player].mult), 0);
+  const avgMult = (qs.reduce((s, q) => s + q[player].mult, 0) / qs.length).toFixed(1);
+  return { totalEV, actualScore, unresolvedEV, correct, resolved: resolved.length, maxExposure, avgMult };
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  const stats = {};
+  PLAYERS.forEach(p => stats[p] = getPlayerStats(p));
+  const ranked = [...PLAYERS].sort((a, b) => stats[b].totalEV - stats[a].totalEV);
+  const resolved = GAME_DATA.questions.filter(q => q.result).length;
+  const totalQs = GAME_DATA.questions.length;
+
+  // Podium
+  const podiumEl = document.getElementById('podium');
+  const medals = ['\u{1F947}', '\u{1F948}', '\u{1F949}'];
+  const classes = ['first', 'second', 'third'];
+  podiumEl.innerHTML = ranked.map((p, i) => {
+    const ev = stats[p].totalEV;
+    const actual = stats[p].actualScore;
+    return `
+    <div class="podium-slot ${classes[i]}">
+      <div class="rank-badge">${medals[i]}</div>
+      <div class="podium-name" style="color:${PLAYER_COLORS[p]}">${PLAYER_NAMES[p]}</div>
+      <div class="podium-score" style="color:${PLAYER_COLORS[p]}">${ev >= 0 ? '+' : ''}${ev.toFixed(1)}</div>
+      <div class="podium-detail">Expected Value</div>
+      <div class="podium-actual" style="background:${PLAYER_COLORS[p]}20;color:${PLAYER_COLORS[p]}">
+        Actual: ${actual >= 0 ? '+' : ''}${actual} &bull; ${stats[p].correct}/${resolved} correct
+      </div>
+    </div>`;
+  }).join('');
+
+  // Stats bar
+  const evSpread = stats[ranked[0]].totalEV - stats[ranked[2]].totalEV;
+  const mostVolatile = findMostVolatileQuestion();
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-card"><div class="label">Questions Resolved</div><div class="value">${resolved} / ${totalQs}</div></div>
+    <div class="stat-card"><div class="label">EV Spread (1st-3rd)</div><div class="value">${evSpread.toFixed(1)}</div></div>
+    <div class="stat-card"><div class="label">Most Volatile Q</div><div class="value">${mostVolatile}</div></div>
+    <div class="stat-card"><div class="label">EV Leader</div><div class="value" style="color:${PLAYER_COLORS[ranked[0]]}">${PLAYER_NAMES[ranked[0]]}</div></div>
+  `;
+
+  // Tabs
+  const tabBar = document.getElementById('tab-bar');
+  tabBar.innerHTML = ['All', ...CATEGORIES].map(cat =>
+    `<button class="tab-btn${cat === 'All' ? ' active' : ''}" data-cat="${cat}">${cat}</button>`
+  ).join('');
+  tabBar.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTable(btn.dataset.cat);
+    });
+  });
+
+  renderTable('All');
+  renderChangeLog();
+  renderChart();
+  renderRiskProfiles(stats);
+  document.getElementById('last-updated').textContent = PRIORS.lastUpdated ? PRIORS.lastUpdated.split('T')[0] : 'Unknown';
+}
+
+function findMostVolatileQuestion() {
+  let maxSwing = 0;
+  let maxId = '\u2014';
+  GAME_DATA.questions.filter(q => !q.result).forEach(q => {
+    const evs = PLAYERS.map(p => calcEV(q, p));
+    const swing = Math.max(...evs) - Math.min(...evs);
+    if (swing > maxSwing) { maxSwing = swing; maxId = q.id; }
+  });
+  return maxId;
+}
+
+function renderTable(cat) {
+  const qs = cat === 'All' ? GAME_DATA.questions : GAME_DATA.questions.filter(q => q.cat === cat);
+  const tbody = document.getElementById('ev-tbody');
+  tbody.innerHTML = qs.map(q => {
+    const prior = PRIORS.priors[q.id];
+    const isResolved = !!q.result;
+
+    // Probability display
+    let probDisplay = '\u2014';
+    let sourceDisplay = '';
+    if (isResolved) {
+      probDisplay = `<span class="ev-resolved">Resolved: ${q.result}</span>`;
+    } else if (prior) {
+      const probs = prior.probabilities;
+      if (probs['Yes'] !== undefined) {
+        const pct = (probs['Yes'] * 100).toFixed(0);
+        const barColor = probs['Yes'] > 0.5 ? 'var(--green)' : probs['Yes'] < 0.3 ? 'var(--red)' : 'var(--gold)';
+        probDisplay = `<span class="prob-bar" style="width:${Math.max(4, probs['Yes'] * 60)}px;background:${barColor}"></span>` +
+          `<span class="prob-text">${pct}%</span>`;
+      } else {
+        probDisplay = Object.entries(probs).map(([k, v]) =>
+          `<span class="prob-text">${k}:${(v * 100).toFixed(0)}%</span>`
+        ).join(' ');
+      }
+      const srcClass = prior.source === 'resolved' ? 'market' : (prior.source || 'assessment');
+      sourceDisplay = prior.source === 'resolved' ? '' : `<span class="source-badge ${srcClass}">${prior.source || 'assessment'}</span>`;
+    }
+
+    // Player EV cells
+    const playerCells = PLAYERS.map(p => {
+      const ev = calcEV(q, p);
+      const evClass = isResolved ? (ev > 0 ? 'ev-pos' : ev < 0 ? 'ev-neg' : 'ev-zero') :
+        (ev > 0 ? 'ev-pos' : ev < 0 ? 'ev-neg' : 'ev-zero');
+      return `<td>
+        <div class="pick-cell">
+          <div class="pick-val" style="color:${PLAYER_COLORS[p]}">${q[p].pick}</div>
+          <div class="pick-detail">${q[p].stake}\u00D7${q[p].mult}</div>
+          <div class="ev-cell ${evClass}">${ev >= 0 ? '+' : ''}${ev.toFixed(1)}</div>
+        </div>
+      </td>`;
+    }).join('');
+
+    return `<tr>
+      <td><span class="q-id">${q.id}</span></td>
+      <td>${q.text}</td>
+      <td>${probDisplay}</td>
+      <td>${sourceDisplay}</td>
+      ${playerCells}
+    </tr>`;
+  }).join('');
+}
+
+function getMainProbability(q, prior) {
+  const probs = prior.probabilities;
+  if (probs['Yes'] !== undefined) return probs['Yes'];
+  return Math.max(...Object.values(probs));
+}
+
+function renderChangeLog() {
+  const entries = document.getElementById('change-entries');
+  const changes = [];
+  for (const [qId, prior] of Object.entries(PRIORS.priors)) {
+    if (prior.changeFlag && prior.reasoning && !prior.reasoning.startsWith('Initial assessment')) {
+      const q = GAME_DATA.questions.find(qq => qq.id === qId);
+      changes.push({
+        id: qId,
+        text: q ? q.text : qId,
+        reasoning: prior.reasoning,
+        date: prior.lastChanged,
+        probabilities: prior.probabilities
+      });
+    }
+  }
+
+  if (changes.length === 0) {
+    const snapshotCount = (PRIORS.snapshots || []).length;
+    entries.innerHTML = snapshotCount <= 1
+      ? '<div class="no-changes">Initial probabilities set on ' + (PRIORS.lastUpdated || '').split('T')[0] + '. Changes will appear here after the first weekly update.</div>'
+      : '<div class="no-changes">No significant probability shifts (>10pp) since last update.</div>';
+    return;
+  }
+
+  entries.innerHTML = changes.map(c => {
+    const probSummary = Object.entries(c.probabilities).map(([k, v]) => `${k}: ${(v * 100).toFixed(0)}%`).join(', ');
+    return `<div class="change-entry">
+      <div class="change-header">
+        <span><span class="change-qid">${c.id}</span> ${c.text}</span>
+        <span class="change-delta">${probSummary}</span>
+      </div>
+      <div class="change-reasoning">${c.reasoning}</div>
+      <div class="change-date">${c.date}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderChart() {
+  const snapshots = PRIORS.snapshots || [];
+  if (snapshots.length < 1) return;
+
+  const ctx = document.getElementById('ev-chart').getContext('2d');
+  const labels = snapshots.map(s => s.date);
+  const datasets = PLAYERS.map(p => ({
+    label: PLAYER_NAMES[p],
+    data: snapshots.map(s => s.evScores ? s.evScores[p] : 0),
+    borderColor: PLAYER_COLORS[p],
+    backgroundColor: PLAYER_COLORS[p] + '20',
+    tension: 0.3,
+    pointRadius: 4,
+    pointHoverRadius: 6,
+    borderWidth: 2,
+    fill: false
+  }));
+
+  new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: '#8899b3', font: { family: 'Inter' } }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#8899b3', font: { family: 'JetBrains Mono', size: 11 } },
+          grid: { color: '#2d3f5a' }
+        },
+        y: {
+          ticks: { color: '#8899b3', font: { family: 'JetBrains Mono', size: 11 },
+            callback: v => (v >= 0 ? '+' : '') + v },
+          grid: { color: '#2d3f5a' }
+        }
+      }
+    }
+  });
+}
+
+function renderRiskProfiles(stats) {
+  const section = document.getElementById('risk-section');
+  section.innerHTML = PLAYERS.map(p => {
+    const s = stats[p];
+    const unresolvedQs = GAME_DATA.questions.filter(q => !q.result);
+    const posEVcount = unresolvedQs.filter(q => calcEV(q, p) > 0).length;
+    const negEVcount = unresolvedQs.filter(q => calcEV(q, p) < 0).length;
+    return `
+    <div class="risk-card">
+      <h4 style="color:${PLAYER_COLORS[p]}">${PLAYER_NAMES[p]}'s EV Profile</h4>
+      <div class="risk-stat"><span>Total EV</span><span class="val" style="color:${s.totalEV >= 0 ? 'var(--green)' : 'var(--red)'}">${s.totalEV >= 0 ? '+' : ''}${s.totalEV.toFixed(1)}</span></div>
+      <div class="risk-stat"><span>Locked Score (resolved)</span><span class="val">${s.actualScore >= 0 ? '+' : ''}${s.actualScore}</span></div>
+      <div class="risk-stat"><span>Projected from unresolved</span><span class="val">${s.unresolvedEV >= 0 ? '+' : ''}${s.unresolvedEV.toFixed(1)}</span></div>
+      <div class="risk-stat"><span>Positive EV picks</span><span class="val" style="color:var(--green)">${posEVcount}</span></div>
+      <div class="risk-stat"><span>Negative EV picks</span><span class="val" style="color:var(--red)">${negEVcount}</span></div>
+      <div class="risk-stat"><span>Max single exposure</span><span class="val">\u00B1${s.maxExposure}</span></div>
+      <div class="risk-stat"><span>Avg confidence mult</span><span class="val">\u00D7${s.avgMult}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadData();
+</script>
+</body>
+</html>
