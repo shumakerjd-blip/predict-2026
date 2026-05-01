@@ -54,6 +54,7 @@
   .podium-score { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; }
   .podium-detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
   .podium-actual { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; margin-top: 6px; padding: 3px 10px; border-radius: 6px; display: inline-block; }
+  .podium-delta { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-top: 4px; opacity: 0.8; }
 
   /* Stats bar */
   .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -100,6 +101,8 @@
   .source-badge.market { background: rgba(74,144,217,0.15); color: var(--accent); }
   .source-badge.assessment { background: rgba(245,166,35,0.15); color: var(--gold); }
   .source-badge.blended { background: rgba(46,204,113,0.15); color: var(--green); }
+  .changed-row td { background: rgba(245,166,35,0.04) !important; }
+  .changed-row td:first-child { border-left: 2px solid rgba(245,166,35,0.4); }
 
   /* Change Log */
   .change-log { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
@@ -131,12 +134,6 @@
   /* Footer */
   .footer { text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.8rem; }
 
-  /* Loading */
-  .loading { text-align: center; padding: 60px; color: var(--text-muted); }
-  .loading .spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid var(--border);
-    border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
   /* Responsive */
   @media (max-width: 768px) {
     .podium { flex-direction: column; align-items: center; }
@@ -155,12 +152,7 @@
     <div class="year-badge">SEASON 1 &bull; 2026 &bull; UPDATED <span id="last-updated">...</span></div>
   </div>
 
-  <div id="loading" class="loading">
-    <div class="spinner"></div>
-    <p style="margin-top:16px;">Loading probability data...</p>
-  </div>
-
-  <div id="app" style="display:none;">
+  <div id="app">
     <div id="podium" class="podium"></div>
     <div id="stats-bar" class="stats-bar"></div>
 
@@ -206,37 +198,19 @@
 
 <script>
 // ============================================================
+// EMBEDDED DATA
+// ============================================================
+const GAME_DATA = {"lastUpdated":"2026-03-08","players":["justin","barry","ben"],"playerNames":{"justin":"Justin","barry":"Barry","ben":"Ben"},"confLabels":{"1":"55%","2":"65%","3":"75%","4":"85%","5":"95%"},"categories":["Economy","Politics","AI & Tech","Chaos & Culture","Planet & Health","Sports","Personal Goals"],"questions":[{"id":"E1","text":"Does the U.S. enter a recession in 2026?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"NBER business cycle dates","result":"","justin":{"pick":"No","stake":10,"mult":3},"barry":{"pick":"No","stake":10,"mult":3},"ben":{"pick":"No","stake":10,"mult":5}},{"id":"E2","text":"Does U.S. CPI inflation end 2026 above 3.5% YoY?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"BLS CPI release","result":"","justin":{"pick":"No","stake":10,"mult":3},"barry":{"pick":"No","stake":7,"mult":3},"ben":{"pick":"No","stake":5,"mult":5}},{"id":"E3","text":"Does the Fed cut rates at least twice in 2026?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"FOMC rate announcements","result":"","justin":{"pick":"Yes","stake":10,"mult":2},"barry":{"pick":"Yes","stake":10,"mult":2},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"E4","text":"Does U.S. avg gasoline price end 2026 higher than it began?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"EIA weekly gasoline prices","result":"","justin":{"pick":"No","stake":10,"mult":1},"barry":{"pick":"No","stake":3,"mult":2},"ben":{"pick":"No","stake":5,"mult":5}},{"id":"E5","text":"Does the S&P 500 end 2026 higher than it began?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"S&P Dow Jones Indices","result":"","justin":{"pick":"Yes","stake":10,"mult":5},"barry":{"pick":"Yes","stake":10,"mult":5},"ben":{"pick":"Yes","stake":10,"mult":5}},{"id":"E6","text":"Does U.S. unemployment end 2026 above 4.5%?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"BLS U-3 rate","result":"","justin":{"pick":"No","stake":8,"mult":2},"barry":{"pick":"No","stake":4,"mult":2},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"E7","text":"Do U.S. mortgage rates (30yr fixed) end 2026 above 7.0%?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"Freddie Mac PMMS","result":"","justin":{"pick":"No","stake":10,"mult":3},"barry":{"pick":"Yes","stake":8,"mult":3},"ben":{"pick":"No","stake":10,"mult":5}},{"id":"E8","text":"Does Bitcoin end 2026 above $100,000?","cat":"Economy","outcomes":["Yes","No"],"resolutionSource":"CoinGecko/CoinMarketCap","result":"","justin":{"pick":"No","stake":1,"mult":1},"barry":{"pick":"Yes","stake":4,"mult":2},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"P1","text":"Does the U.S. government shut down at any point in 2026?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Official announcements","result":"Yes","justin":{"pick":"Yes","stake":5,"mult":1},"barry":{"pick":"Yes","stake":5,"mult":3},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"P2","text":"Does SCOTUS materially expand executive power in 2026?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Supreme Court opinions + legal analysis","result":"","justin":{"pick":"Yes","stake":10,"mult":4},"barry":{"pick":"Yes","stake":7,"mult":2},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"P3","text":"Does a Trump legal case reach final judgment in 2026?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Court records / legal reporting","result":"","justin":{"pick":"Yes","stake":10,"mult":2},"barry":{"pick":"No","stake":10,"mult":3},"ben":{"pick":"No","stake":4,"mult":5}},{"id":"P4","text":"Does a Trump admin official receive criminal conviction in 2026?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Court records / legal reporting","result":"","justin":{"pick":"Yes","stake":1,"mult":1},"barry":{"pick":"No","stake":4,"mult":2},"ben":{"pick":"Yes","stake":2,"mult":5}},{"id":"P5","text":"Does a Cabinet/senior WH official resign or get fired in 2026?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Official announcements","result":"Yes","justin":{"pick":"Yes","stake":10,"mult":5},"barry":{"pick":"Yes","stake":10,"mult":5},"ben":{"pick":"Yes","stake":10,"mult":5}},{"id":"P6","text":"Does Congress pass a major immigration bill in 2026?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Congress.gov","result":"","justin":{"pick":"No","stake":10,"mult":5},"barry":{"pick":"No","stake":10,"mult":5},"ben":{"pick":"Yes","stake":1,"mult":5}},{"id":"P7","text":"Do Republicans hold the U.S. House after the 2026 midterms?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Official election results / AP","result":"","justin":{"pick":"No","stake":10,"mult":4},"barry":{"pick":"No","stake":10,"mult":5},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"P8","text":"Do Republicans hold the U.S. Senate after the 2026 midterms?","cat":"Politics","outcomes":["Yes","No"],"resolutionSource":"Official election results / AP","result":"","justin":{"pick":"No","stake":1,"mult":1},"barry":{"pick":"Yes","stake":10,"mult":5},"ben":{"pick":"No","stake":5,"mult":5}},{"id":"A1","text":"Does a major AI product surpass 500M WAU in 2026?","cat":"AI & Tech","outcomes":["Yes","No"],"resolutionSource":"Company earnings / official metrics","result":"","justin":{"pick":"No","stake":5,"mult":2},"barry":{"pick":"Yes","stake":8,"mult":3},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"A2","text":"Does an AI companion app become a top-10 app in 2026?","cat":"AI & Tech","outcomes":["Yes","No"],"resolutionSource":"App store ranking reports","result":"","justin":{"pick":"Yes","stake":5,"mult":2},"barry":{"pick":"Yes","stake":4,"mult":2},"ben":{"pick":"No","stake":2,"mult":5}},{"id":"A3","text":"Does an AI deepfake impact a national-security story in 2026?","cat":"AI & Tech","outcomes":["Yes","No"],"resolutionSource":"Major reporting + official statements","result":"","justin":{"pick":"No","stake":1,"mult":1},"barry":{"pick":"Yes","stake":7,"mult":3},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"A4","text":"Major global policy move requiring AI content labeling in 2026?","cat":"AI & Tech","outcomes":["Yes","No"],"resolutionSource":"Official policy documents","result":"","justin":{"pick":"Yes","stake":1,"mult":1},"barry":{"pick":"Yes","stake":4,"mult":2},"ben":{"pick":"Yes","stake":10,"mult":5}},{"id":"A5","text":"Does an AI-created song reach Billboard Hot 100 top 10 in 2026?","cat":"AI & Tech","outcomes":["Yes","No"],"resolutionSource":"Billboard chart + verification","result":"","justin":{"pick":"Yes","stake":1,"mult":1},"barry":{"pick":"No","stake":2,"mult":2},"ben":{"pick":"No","stake":5,"mult":5}},{"id":"A6","text":"Does Congress hold a hearing with 'AI companions' in the title?","cat":"AI & Tech","outcomes":["Yes","No"],"resolutionSource":"Congress.gov / committee websites","result":"","justin":{"pick":"Yes","stake":5,"mult":1},"barry":{"pick":"Yes","stake":2,"mult":2},"ben":{"pick":"No","stake":5,"mult":5}},{"id":"F1","text":"The biggest shadow (Wikipedia) — pick category A-F","cat":"Chaos & Culture","outcomes":["A","B","C","D","E","F"],"resolutionSource":"Wikimedia pageview rankings","result":"","justin":{"pick":"E","stake":1,"mult":1},"barry":{"pick":"B","stake":1,"mult":1},"ben":{"pick":"B","stake":5,"mult":5}},{"id":"F2","text":"The cultural fixation (Google Year in Search) — pick A-F","cat":"Chaos & Culture","outcomes":["A","B","C","D","E","F"],"resolutionSource":"Google Year in Search 2026","result":"","justin":{"pick":"D","stake":1,"mult":1},"barry":{"pick":"D","stake":1,"mult":1},"ben":{"pick":"A","stake":5,"mult":5}},{"id":"F3","text":"Word of the Year (Merriam-Webster) — pick category A-F","cat":"Chaos & Culture","outcomes":["A","B","C","D","E","F"],"resolutionSource":"Merriam-Webster announcement","result":"","justin":{"pick":"C","stake":1,"mult":1},"barry":{"pick":"B","stake":1,"mult":1},"ben":{"pick":"A","stake":2,"mult":5}},{"id":"F4","text":"Time Person of the Year — A) individual, B) group, C) concept","cat":"Chaos & Culture","outcomes":["A","B","C"],"resolutionSource":"Time announcement","result":"","justin":{"pick":"A","stake":1,"mult":1},"barry":{"pick":"A","stake":1,"mult":1},"ben":{"pick":"A","stake":2,"mult":5}},{"id":"F5","text":"Authenticity becomes a first-class problem (newsroom policy)?","cat":"Chaos & Culture","outcomes":["Yes","No"],"resolutionSource":"Public policy/editor notes","result":"","justin":{"pick":"Yes","stake":1,"mult":1},"barry":{"pick":"No","stake":1,"mult":1},"ben":{"pick":"Yes","stake":1,"mult":5}},{"id":"F6","text":"A fragility tell (fat-tail meets institutions)?","cat":"Chaos & Culture","outcomes":["Yes","No"],"resolutionSource":"Official statements + reporting","result":"","justin":{"pick":"No","stake":1,"mult":1},"barry":{"pick":"No","stake":1,"mult":1},"ben":{"pick":"Yes","stake":1,"mult":5}},{"id":"R1","text":"Extreme poverty (World Bank): which bin? A/B/C","cat":"Planet & Health","outcomes":["A","B","C"],"resolutionSource":"World Bank poverty estimates","result":"","justin":{"pick":"A","stake":3,"mult":1},"barry":{"pick":"B","stake":3,"mult":1},"ben":{"pick":"B","stake":1,"mult":5}},{"id":"R2","text":"Under-5 mortality (UNICEF): which bin? A/B/C","cat":"Planet & Health","outcomes":["A","B","C"],"resolutionSource":"UNICEF/IGME series","result":"","justin":{"pick":"B","stake":1,"mult":1},"barry":{"pick":"C","stake":6,"mult":3},"ben":{"pick":"B","stake":1,"mult":5}},{"id":"R3","text":"Global life expectancy: which bin? A/B/C","cat":"Planet & Health","outcomes":["A","B","C"],"resolutionSource":"World Bank / UN series","result":"","justin":{"pick":"B","stake":1,"mult":1},"barry":{"pick":"B","stake":3,"mult":2},"ben":{"pick":"B","stake":1,"mult":5}},{"id":"R4","text":"CO2 growth rate (NOAA Mauna Loa): which bin? A/B/C","cat":"Planet & Health","outcomes":["A","B","C"],"resolutionSource":"NOAA GML Annual Mean Growth Rate","result":"","justin":{"pick":"B","stake":1,"mult":1},"barry":{"pick":"B","stake":1,"mult":1},"ben":{"pick":"B","stake":1,"mult":5}},{"id":"R5","text":"Renewables share (Ember): which bin? A/B/C","cat":"Planet & Health","outcomes":["A","B","C"],"resolutionSource":"Ember Global Electricity Review","result":"","justin":{"pick":"A","stake":10,"mult":5},"barry":{"pick":"C","stake":1,"mult":1},"ben":{"pick":"B","stake":1,"mult":5}},{"id":"S1","text":"Who wins the Super Bowl? (pick a team)","cat":"Sports","outcomes":["open"],"resolutionSource":"Official NFL record","result":"Seahawks","justin":{"pick":"Seahawks","stake":1,"mult":1},"barry":{"pick":"Rams","stake":5,"mult":3},"ben":{"pick":"Seahawks","stake":5,"mult":5}},{"id":"S2","text":"Who wins the NBA Finals? (pick a team)","cat":"Sports","outcomes":["open"],"resolutionSource":"Official NBA record","result":"","justin":{"pick":"Thunder","stake":1,"mult":1},"barry":{"pick":"Celtics","stake":1,"mult":1},"ben":{"pick":"Pistons","stake":2,"mult":5}},{"id":"S3","text":"Who wins the Stanley Cup? (pick a team)","cat":"Sports","outcomes":["open"],"resolutionSource":"Official NHL record","result":"","justin":{"pick":"Avalanche","stake":1,"mult":1},"barry":{"pick":"Avalanche","stake":1,"mult":1},"ben":{"pick":"Avalanche","stake":3,"mult":5}},{"id":"S4","text":"Does USMNT reach QF or better at 2026 World Cup?","cat":"Sports","outcomes":["Yes","No"],"resolutionSource":"Official FIFA results","result":"","justin":{"pick":"No","stake":10,"mult":5},"barry":{"pick":"Yes","stake":1,"mult":1},"ben":{"pick":"No","stake":10,"mult":5}},{"id":"S5","text":"Super Bowl total points: A) <=40, B) 41-54, C) >=55","cat":"Sports","outcomes":["A","B","C"],"resolutionSource":"Official Super Bowl box score","result":"B","justin":{"pick":"B","stake":1,"mult":1},"barry":{"pick":"B","stake":1,"mult":1},"ben":{"pick":"A","stake":5,"mult":5}},{"id":"G1J","text":"Will Justin run a verified 6:00 mile by Nov 30, 2026?","cat":"Personal Goals","outcomes":["Yes","No"],"resolutionSource":"Witnessed stopwatch time","result":"","justin":{"pick":"Yes","stake":10,"mult":5},"barry":{"pick":"Yes","stake":10,"mult":5},"ben":{"pick":"Yes","stake":10,"mult":5}},{"id":"G2J","text":"Will Justin use zero nicotine in December 2026?","cat":"Personal Goals","outcomes":["Yes","No"],"resolutionSource":"Justin's sworn statement","result":"","justin":{"pick":"Yes","stake":10,"mult":5},"barry":{"pick":"No","stake":1,"mult":1},"ben":{"pick":"Yes","stake":10,"mult":5}},{"id":"G1BA","text":"Will Barry read 5,000 pages?","cat":"Personal Goals","outcomes":["Yes","No"],"resolutionSource":"Barry's sworn statement","result":"","justin":{"pick":"Yes","stake":5,"mult":5},"barry":{"pick":"Yes","stake":10,"mult":3},"ben":{"pick":"Yes","stake":5,"mult":5}},{"id":"G2BA","text":"Will Barry quit the daily news cycle?","cat":"Personal Goals","outcomes":["Yes","No"],"resolutionSource":"Barry's sworn statement","result":"","justin":{"pick":"Yes","stake":5,"mult":5},"barry":{"pick":"Yes","stake":10,"mult":5},"ben":{"pick":"No","stake":5,"mult":5}},{"id":"G1BE","text":"Will Ben complete a 100 mile bike ride?","cat":"Personal Goals","outcomes":["Yes","No"],"resolutionSource":"Ben's sworn statement","result":"","justin":{"pick":"Yes","stake":5,"mult":5},"barry":{"pick":"No","stake":1,"mult":1},"ben":{"pick":"Yes","stake":10,"mult":5}},{"id":"G2BE","text":"Will Ben be sober 100 nights in 2026?","cat":"Personal Goals","outcomes":["Yes","No"],"resolutionSource":"Ben's sworn statement","result":"","justin":{"pick":"Yes","stake":5,"mult":5},"barry":{"pick":"Yes","stake":10,"mult":5},"ben":{"pick":"Yes","stake":10,"mult":5}}]};
+
+const PRIORS = {"lastUpdated":"2026-04-30","changeThreshold":0.10,"priors":{"E1":{"probabilities":{"Yes":0.60,"No":0.40},"source":"assessment","reasoning":"Tariff shock update (April 2026): 'Liberation Day' tariffs imposed 10% baseline on all imports plus 145% on China, triggering GDP forecast downgrades across major banks to 0.5–1.0% real growth. Atlanta Fed GDPNow tracking near 0% for Q1. NBER recession threshold now materially closer. Recession is now more likely than not by year-end. Moving Yes from 35% to 60%.","lastChanged":"2026-04-30","changeFlag":true},"E2":{"probabilities":{"Yes":0.55,"No":0.45},"source":"assessment","reasoning":"Tariff shock update (April 2026): 10–145% tariffs are structurally inflationary regardless of demand-side dampening effects. Core goods CPI already accelerating. Tariff pass-through to consumer prices is faster than prior cycles. CPI above 3.5% year-end is now more likely than not. Moving Yes from 30% to 55%.","lastChanged":"2026-04-30","changeFlag":true},"E3":{"probabilities":{"Yes":0.20,"No":0.80},"source":"assessment","reasoning":"Stagflation trap update (April 2026): Fed faces a classic bind — tariff-driven inflation argues against cuts while collapsing growth argues for them. Fed on hold indefinitely. Two cuts in 2026 now requires a significant reversal of tariff policy or a severe recession forcing the Fed's hand. Moving Yes from 40% to 20%.","lastChanged":"2026-04-30","changeFlag":true},"E4":{"probabilities":{"Yes":0.35,"No":0.65},"source":"assessment","reasoning":"Oil market update (April 2026): WTI crude dropped ~15% in the week following the tariff announcement as recession demand-destruction fears dominated. Year-end gas prices now less likely to be higher given persistent slowdown risk. Moving Yes from 40% to 35%.","lastChanged":"2026-04-30","changeFlag":true},"E5":{"probabilities":{"Yes":0.38,"No":0.62},"source":"assessment","reasoning":"Market shock update (April 2026): S&P 500 dropped ~15% in the three days following April 2 tariff announcement. A 90-day pause for most countries (excluding China) allowed partial recovery, but market remains materially below Jan 1 baseline. Requires a substantial second-half rally to resolve Yes. Moving Yes from 50% to 38%.","lastChanged":"2026-04-30","changeFlag":true},"E6":{"probabilities":{"Yes":0.45,"No":0.55},"source":"assessment","reasoning":"Labor market update (April 2026): Tariff-driven slowdown creates elevated layoff risk in manufacturing, retail, logistics, and trade-exposed sectors. Goldman and JPMorgan revised unemployment forecasts to 4.5–5.0% by year-end under their base cases. What was a tail risk is now a modal outcome under pessimistic scenarios. Moving Yes from 25% to 45%.","lastChanged":"2026-04-30","changeFlag":true},"E7":{"probabilities":{"Yes":0.42,"No":0.58},"source":"assessment","reasoning":"Mortgage rate update (April 2026): Fed on hold indefinitely due to tariff-driven inflation keeping short rates elevated. 10-year treasury yields rose on fiscal concerns and tariff inflation pass-through. Freddie Mac PMMS rates have drifted upward. 7%+ threshold is now closer to coin-flip territory. Moving Yes from 30% to 42%.","lastChanged":"2026-04-30","changeFlag":true},"E8":{"probabilities":{"Yes":0.45,"No":0.55},"source":"assessment","reasoning":"Risk-off update (April 2026): Bitcoin sold off sharply with the broader risk-off move in early April, briefly dropping below $80K before recovering. Crypto-friendly regulatory environment is still a tailwind, but macro uncertainty creates resistance to sustained highs. Slight downward revision from 50% to 45%.","lastChanged":"2026-04-30","changeFlag":true},"P1":{"probabilities":{"Yes":1.0,"No":0.0},"source":"resolved","reasoning":"RESOLVED: Government shutdown occurred in 2026.","lastChanged":"2026-03-08","changeFlag":false},"P2":{"probabilities":{"Yes":0.70,"No":0.30},"source":"assessment","reasoning":"SCOTUS update (April 2026): Court accepted key cases this term on presidential removal power and agency deference post-Chevron. Conservative majority appears positioned to further consolidate executive authority in immigration enforcement and regulatory contexts. Arguments in several cases already heard; decisions expected by June. Moving Yes from 65% to 70%.","lastChanged":"2026-04-30","changeFlag":true},"P3":{"probabilities":{"Yes":0.20,"No":0.80},"source":"assessment","reasoning":"Initial assessment: Federal cases dropped post-election. Georgia case faces procedural delays. A final judgment in 2026 is unlikely given procedural posture.","lastChanged":"2026-03-08","changeFlag":false},"P4":{"probabilities":{"Yes":0.15,"No":0.85},"source":"assessment","reasoning":"Initial assessment: Criminal convictions take years to develop. A full conviction within 2026 is a high bar. Historical base rate is low.","lastChanged":"2026-03-08","changeFlag":false},"P5":{"probabilities":{"Yes":1.0,"No":0.0},"source":"resolved","reasoning":"RESOLVED: Cabinet/senior WH official resigned or was fired in 2026.","lastChanged":"2026-03-08","changeFlag":false},"P6":{"probabilities":{"Yes":0.10,"No":0.90},"source":"assessment","reasoning":"Initial assessment: Requires bipartisan cooperation (unlikely) or reconciliation (limited). Slim House majority makes partisan legislation difficult. Decades of legislative failure on immigration.","lastChanged":"2026-03-08","changeFlag":false},"P7":{"probabilities":{"Yes":0.30,"No":0.70},"source":"assessment","reasoning":"Economic headwinds update (April 2026): The tariff shock and resulting economic dislocation are historically devastating for the president's party in midterms. The prior 35% accounted for structural midterm losses; the current economic environment — rising prices, falling markets, recession fear — materially strengthens Democratic tailwinds. Moving Yes from 35% to 30%.","lastChanged":"2026-04-30","changeFlag":true},"P8":{"probabilities":{"Yes":0.70,"No":0.30},"source":"assessment","reasoning":"Initial assessment: Republicans won strong Senate majority in 2024 (~53-47). 2026 map is more balanced. Flipping enough seats is structurally difficult.","lastChanged":"2026-03-08","changeFlag":false},"A1":{"probabilities":{"Yes":0.55,"No":0.45},"source":"assessment","reasoning":"Initial assessment: ChatGPT had ~400M MAU in early 2025, growing rapidly. Meta AI embedded in WhatsApp/Instagram is the most likely path to 500M WAU.","lastChanged":"2026-03-08","changeFlag":false},"A2":{"probabilities":{"Yes":0.50,"No":0.50},"source":"assessment","reasoning":"Initial assessment: Character.AI and Replika show strong downloads but sustaining top-10 against TikTok/Instagram is very hard. A viral moment could spike for one month.","lastChanged":"2026-03-08","changeFlag":false},"A3":{"probabilities":{"Yes":0.60,"No":0.40},"source":"assessment","reasoning":"Geopolitical AI update (April 2026): Deepfake incidents are accelerating globally. Heightened tensions in multiple theaters (Taiwan Strait, Eastern Europe) increase the operational temptation to use synthetic media in disinformation campaigns. Technology improving faster than detection. Moving Yes from 55% to 60%.","lastChanged":"2026-04-30","changeFlag":true},"A4":{"probabilities":{"Yes":0.82,"No":0.18},"source":"assessment","reasoning":"Initial assessment: EU AI Act transparency obligations scheduled for implementation. China already requires AI content labeling. Very likely in at least one major jurisdiction.","lastChanged":"2026-03-08","changeFlag":false},"A5":{"probabilities":{"Yes":0.10,"No":0.90},"source":"assessment","reasoning":"Initial assessment: Billboard has excluded purely AI-generated content. Industry resistance strong. Being 'widely verified as AI-created' contradicts incentives for chart success.","lastChanged":"2026-03-08","changeFlag":false},"A6":{"probabilities":{"Yes":0.60,"No":0.40},"source":"assessment","reasoning":"Initial assessment: Character.AI teen safety controversy generated congressional attention. Political salience of AI companion risks to children makes this moderately likely.","lastChanged":"2026-03-08","changeFlag":false},"F1":{"probabilities":{"A":0.08,"B":0.25,"C":0.15,"D":0.30,"E":0.15,"F":0.07},"source":"assessment","reasoning":"Initial assessment: Wikipedia top pages skew toward celebrity deaths, sports, and pop culture. 2026 FIFA World Cup in North America gives Sports/Entertainment (D) an edge.","lastChanged":"2026-03-08","changeFlag":false},"F2":{"probabilities":{"A":0.30,"B":0.10,"C":0.12,"D":0.28,"E":0.08,"F":0.12},"source":"assessment","reasoning":"Initial assessment: Midterm elections dominate U.S. search trends in election years, but 2026 FIFA World Cup on home soil could rival. Politics (A) and Sports (D) are leading candidates.","lastChanged":"2026-03-08","changeFlag":false},"F3":{"probabilities":{"A":0.30,"B":0.25,"C":0.15,"D":0.08,"E":0.07,"F":0.15},"source":"assessment","reasoning":"Initial assessment: MW Word of the Year reflects lookup surges. AI terminology entering public vocabulary makes Tech/AI (A) strong. Politics (B) also strong given midterms.","lastChanged":"2026-03-08","changeFlag":false},"F4":{"probabilities":{"A":0.60,"B":0.25,"C":0.15},"source":"assessment","reasoning":"Initial assessment: Time POTY has historically favored individuals (~70%). Recent picks: Trump 2024, Swift 2023, Zelenskyy 2022. Individual remains strong base rate.","lastChanged":"2026-03-08","changeFlag":false},"F5":{"probabilities":{"Yes":0.45,"No":0.55},"source":"assessment","reasoning":"Initial assessment: Major outlets incrementally updating AI policies. AP and Reuters had early guidelines. Requiring 2 of 7 specific outlets to publish prominent policy is possible but legacy institutions move slowly.","lastChanged":"2026-03-08","changeFlag":false},"F6":{"probabilities":{"Yes":0.35,"No":0.65},"source":"assessment","reasoning":"Initial assessment: High bar requiring single AI event to trigger reactions across 3+ institutional domains within 30 days. A fat-tail event by design. Probability meaningful but below 50%.","lastChanged":"2026-03-08","changeFlag":false},"R1":{"probabilities":{"A":0.30,"B":0.55,"C":0.15},"source":"assessment","reasoning":"Initial assessment: Long-run trend is ~0.2-0.3pp annual decline, but recent years show slower progress post-COVID. Modest decline or flat (B) most likely.","lastChanged":"2026-03-08","changeFlag":false},"R2":{"probabilities":{"A":0.25,"B":0.55,"C":0.20},"source":"assessment","reasoning":"Initial assessment: Historical trend ~1.0-1.5 per 1000 annual decline, but decelerating. COVID disrupted healthcare access. Modest decline under 1.0 (B) most likely.","lastChanged":"2026-03-08","changeFlag":false},"R3":{"probabilities":{"A":0.45,"B":0.40,"C":0.15},"source":"assessment","reasoning":"Initial assessment: Post-COVID life expectancy recovery has been strong. By 2025-2026 recovery effect weakens. Modest increase (A) plausible but flat (B) increasingly likely.","lastChanged":"2026-03-08","changeFlag":false},"R4":{"probabilities":{"A":0.20,"B":0.45,"C":0.35},"source":"assessment","reasoning":"Initial assessment: Recent years show elevated CO2 growth (~3.4-3.6 ppm due to El Nino). Neutral pattern should moderate toward 2.0-2.8 (B), but weakened carbon sinks could push higher (C).","lastChanged":"2026-03-08","changeFlag":false},"R5":{"probabilities":{"A":0.75,"B":0.20,"C":0.05},"source":"assessment","reasoning":"Initial assessment: Renewables share increasing ~1.5-2.0pp annually. Massive solar/wind deployment, especially China. A 1.0+ pp increase (A) is the strong favorite.","lastChanged":"2026-03-08","changeFlag":false},"S1":{"probabilities":{"Seahawks":1.0},"source":"resolved","reasoning":"RESOLVED: Seahawks won the Super Bowl.","lastChanged":"2026-03-08","changeFlag":false},"S2":{"probabilities":{"Thunder":0.22,"Celtics":0.14,"Pistons":0.01,"Other":0.63},"source":"assessment","reasoning":"Initial assessment: Thunder were consensus preseason favorites with SGA/Chet core. Celtics strong as defending champs. Pistons a deep longshot rebuild project.","lastChanged":"2026-03-08","changeFlag":false},"S3":{"probabilities":{"Avalanche":0.12,"Other":0.88},"source":"assessment","reasoning":"Initial assessment: Avalanche are perennial contenders with MacKinnon/Makar. Even a top-3 favorite has ~10-15% chance given NHL playoff parity.","lastChanged":"2026-03-08","changeFlag":false},"S4":{"probabilities":{"Yes":0.55,"No":0.45},"source":"assessment","reasoning":"Initial assessment: 2026 World Cup hosted in US. Expanded 48-team format. Home advantage and talented squad make QF realistic but not certain.","lastChanged":"2026-03-08","changeFlag":false},"S5":{"probabilities":{"B":1.0},"source":"resolved","reasoning":"RESOLVED: Super Bowl total points fell in the 41-54 range (B).","lastChanged":"2026-03-08","changeFlag":false},"G1J":{"probabilities":{"Yes":0.35,"No":0.65},"source":"assessment","reasoning":"Initial assessment: Justin lost 90lbs, actively training, early-to-mid 40s at ~17% BF. A 6:00 mile is serious — requires dedicated run-specific training beyond his current general fitness regimen.","lastChanged":"2026-03-08","changeFlag":false},"G2J":{"probabilities":{"Yes":0.50,"No":0.50},"source":"assessment","reasoning":"Cessation track record update (April 2026): Two additional months of data since initial assessment. If Justin has maintained nicotine cessation through March–April — consistent with his extraordinary demonstrated discipline (90lb loss, full alcohol elimination) — the Bayesian update from continued abstinence warrants meaningful upward revision. Moving Yes from 40% to 50%.","lastChanged":"2026-04-30","changeFlag":true},"G1BA":{"probabilities":{"Yes":0.55,"No":0.45},"source":"assessment","reasoning":"Initial assessment: 5,000 pages is ~14 pages/day, roughly 1 book every 2-3 weeks. Achievable for a motivated reader. Barry staked 10pts at 75%, showing confidence.","lastChanged":"2026-03-08","changeFlag":false},"G2BA":{"probabilities":{"Yes":0.30,"No":0.70},"source":"assessment","reasoning":"Initial assessment: Quitting daily news consumption is hard — news is designed to be addictive, especially during midterm election season. Base rate for sustained behavioral change is low.","lastChanged":"2026-03-08","changeFlag":false},"G1BE":{"probabilities":{"Yes":0.45,"No":0.55},"source":"assessment","reasoning":"Initial assessment: A century ride is achievable with 3-6 months dedicated training. Ben staked 10pts at 95%, showing high confidence. Without current training data, moderate probability.","lastChanged":"2026-03-08","changeFlag":false},"G2BE":{"probabilities":{"Yes":0.55,"No":0.45},"source":"assessment","reasoning":"Initial assessment: 100 sober nights is ~27% of the year — roughly 2 sober nights per week. A moderate goal that doesn't require total sobriety. Ben staked 10pts at 95%.","lastChanged":"2026-03-08","changeFlag":false}},"snapshots":[{"date":"2026-03-08","priors":{"E1":{"Yes":0.35,"No":0.65},"E2":{"Yes":0.30,"No":0.70},"E3":{"Yes":0.40,"No":0.60},"E4":{"Yes":0.40,"No":0.60},"E5":{"Yes":0.50,"No":0.50},"E6":{"Yes":0.25,"No":0.75},"E7":{"Yes":0.30,"No":0.70},"E8":{"Yes":0.50,"No":0.50},"P1":{"Yes":1.0,"No":0.0},"P2":{"Yes":0.65,"No":0.35},"P3":{"Yes":0.20,"No":0.80},"P4":{"Yes":0.15,"No":0.85},"P5":{"Yes":1.0,"No":0.0},"P6":{"Yes":0.10,"No":0.90},"P7":{"Yes":0.35,"No":0.65},"P8":{"Yes":0.70,"No":0.30},"A1":{"Yes":0.55,"No":0.45},"A2":{"Yes":0.50,"No":0.50},"A3":{"Yes":0.55,"No":0.45},"A4":{"Yes":0.82,"No":0.18},"A5":{"Yes":0.10,"No":0.90},"A6":{"Yes":0.60,"No":0.40},"F1":{"A":0.08,"B":0.25,"C":0.15,"D":0.30,"E":0.15,"F":0.07},"F2":{"A":0.30,"B":0.10,"C":0.12,"D":0.28,"E":0.08,"F":0.12},"F3":{"A":0.30,"B":0.25,"C":0.15,"D":0.08,"E":0.07,"F":0.15},"F4":{"A":0.60,"B":0.25,"C":0.15},"F5":{"Yes":0.45,"No":0.55},"F6":{"Yes":0.35,"No":0.65},"R1":{"A":0.30,"B":0.55,"C":0.15},"R2":{"A":0.25,"B":0.55,"C":0.20},"R3":{"A":0.45,"B":0.40,"C":0.15},"R4":{"A":0.20,"B":0.45,"C":0.35},"R5":{"A":0.75,"B":0.20,"C":0.05},"S1":{"Seahawks":1.0},"S2":{"Thunder":0.22,"Celtics":0.14,"Pistons":0.01,"Other":0.63},"S3":{"Avalanche":0.12,"Other":0.88},"S4":{"Yes":0.55,"No":0.45},"S5":{"B":1.0},"G1J":{"Yes":0.35,"No":0.65},"G2J":{"Yes":0.40,"No":0.60},"G1BA":{"Yes":0.55,"No":0.45},"G2BA":{"Yes":0.30,"No":0.70},"G1BE":{"Yes":0.45,"No":0.55},"G2BE":{"Yes":0.55,"No":0.45}},"evScores":{"justin":130.0,"barry":134.8,"ben":81.8},"changes":["Initial probability assessment for all 44 questions"]},{"date":"2026-04-30","priors":{"E1":{"Yes":0.60,"No":0.40},"E2":{"Yes":0.55,"No":0.45},"E3":{"Yes":0.20,"No":0.80},"E4":{"Yes":0.35,"No":0.65},"E5":{"Yes":0.38,"No":0.62},"E6":{"Yes":0.45,"No":0.55},"E7":{"Yes":0.42,"No":0.58},"E8":{"Yes":0.45,"No":0.55},"P1":{"Yes":1.0,"No":0.0},"P2":{"Yes":0.70,"No":0.30},"P3":{"Yes":0.20,"No":0.80},"P4":{"Yes":0.15,"No":0.85},"P5":{"Yes":1.0,"No":0.0},"P6":{"Yes":0.10,"No":0.90},"P7":{"Yes":0.30,"No":0.70},"P8":{"Yes":0.70,"No":0.30},"A1":{"Yes":0.55,"No":0.45},"A2":{"Yes":0.50,"No":0.50},"A3":{"Yes":0.60,"No":0.40},"A4":{"Yes":0.82,"No":0.18},"A5":{"Yes":0.10,"No":0.90},"A6":{"Yes":0.60,"No":0.40},"F1":{"A":0.08,"B":0.25,"C":0.15,"D":0.30,"E":0.15,"F":0.07},"F2":{"A":0.30,"B":0.10,"C":0.12,"D":0.28,"E":0.08,"F":0.12},"F3":{"A":0.30,"B":0.25,"C":0.15,"D":0.08,"E":0.07,"F":0.15},"F4":{"A":0.60,"B":0.25,"C":0.15},"F5":{"Yes":0.45,"No":0.55},"F6":{"Yes":0.35,"No":0.65},"R1":{"A":0.30,"B":0.55,"C":0.15},"R2":{"A":0.25,"B":0.55,"C":0.20},"R3":{"A":0.45,"B":0.40,"C":0.15},"R4":{"A":0.20,"B":0.45,"C":0.35},"R5":{"A":0.75,"B":0.20,"C":0.05},"S1":{"Seahawks":1.0},"S2":{"Thunder":0.22,"Celtics":0.14,"Pistons":0.01,"Other":0.63},"S3":{"Avalanche":0.12,"Other":0.88},"S4":{"Yes":0.55,"No":0.45},"S5":{"B":1.0},"G1J":{"Yes":0.35,"No":0.65},"G2J":{"Yes":0.50,"No":0.50},"G1BA":{"Yes":0.55,"No":0.45},"G2BA":{"Yes":0.30,"No":0.70},"G1BE":{"Yes":0.45,"No":0.55},"G2BE":{"Yes":0.55,"No":0.45}},"evScores":{"justin":80.4,"barry":100.0,"ben":32.8},"changes":["E1: Yes 35%→60% — Liberation Day tariff shock, GDP forecasts slashed, recession now more likely than not","E2: Yes 30%→55% — Tariff pass-through makes 3.5%+ CPI more likely than not","E3: Yes 40%→20% — Fed locked in stagflation trap, two cuts in 2026 now unlikely","E4: Yes 40%→35% — Recession demand destruction dampening oil prices","E5: Yes 50%→38% — S&P dropped ~15% post-tariffs, materially below Jan 1 baseline","E6: Yes 25%→45% — Tariff slowdown elevates unemployment toward 4.5-5.0% forecasts","E7: Yes 30%→42% — Fed on hold longer, yields elevated, mortgage rates drifting up","E8: Yes 50%→45% — Risk-off environment creates crypto headwinds despite regulatory tailwind","P2: Yes 65%→70% — SCOTUS accepted key removal-power and agency-deference cases this term","P7: Yes 35%→30% — Economic dislocation strengthens midterm headwinds for ruling party","A3: Yes 55%→60% — Deepfake incidents accelerating, geopolitical tensions elevating operational temptation","G2J: Yes 40%→50% — Two additional months of nicotine cessation track record warrants Bayesian update"]}]};
+
+// ============================================================
 // CONSTANTS
 // ============================================================
 const PLAYERS = ['justin', 'barry', 'ben'];
 const PLAYER_NAMES = { justin: 'Justin', barry: 'Barry', ben: 'Ben' };
 const PLAYER_COLORS = { justin: '#4a90d9', barry: '#e67e22', ben: '#2ecc71' };
-const CONF_LABELS = { 1: '55%', 2: '65%', 3: '75%', 4: '85%', 5: '95%' };
 const CATEGORIES = ['Economy', 'Politics', 'AI & Tech', 'Chaos & Culture', 'Planet & Health', 'Sports', 'Personal Goals'];
-
-let GAME_DATA = null;
-let PRIORS = null;
-
-// ============================================================
-// DATA LOADING
-// ============================================================
-async function loadData() {
-  try {
-    const [gameResp, priorsResp] = await Promise.all([
-      fetch('data/game-data.json'),
-      fetch('data/priors.json')
-    ]);
-    GAME_DATA = await gameResp.json();
-    PRIORS = await priorsResp.json();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    render();
-  } catch (err) {
-    document.getElementById('loading').innerHTML =
-      '<p style="color:var(--red);">Error loading data. Make sure you are running a local server.</p>' +
-      '<p style="color:var(--text-muted);margin-top:8px;font-size:0.85rem;">' + err.message + '</p>';
-  }
-}
 
 // ============================================================
 // EV ENGINE
@@ -252,9 +226,7 @@ function getPlayerPickProb(q, player) {
   const prior = PRIORS.priors[q.id];
   if (!prior) return 0.5;
   const pick = q[player].pick;
-  if (q.result) {
-    return pick.toLowerCase() === q.result.toLowerCase() ? 1.0 : 0.0;
-  }
+  if (q.result) return pick.toLowerCase() === q.result.toLowerCase() ? 1.0 : 0.0;
   const probs = prior.probabilities;
   if (probs[pick] !== undefined) return probs[pick];
   const pickLower = pick.toLowerCase();
@@ -277,10 +249,6 @@ function getPlayerTotalEV(player) {
 
 function getPlayerActualScore(player) {
   return GAME_DATA.questions.filter(q => q.result).reduce((sum, q) => sum + calcActualScore(q, player), 0);
-}
-
-function getPlayerCatEV(player, cat) {
-  return GAME_DATA.questions.filter(q => q.cat === cat).reduce((sum, q) => sum + calcEV(q, player), 0);
 }
 
 function getPlayerStats(player) {
@@ -306,6 +274,10 @@ function render() {
   const resolved = GAME_DATA.questions.filter(q => q.result).length;
   const totalQs = GAME_DATA.questions.length;
 
+  // Get previous snapshot for delta display
+  const snapshots = PRIORS.snapshots || [];
+  const prevSnapshot = snapshots.length >= 2 ? snapshots[snapshots.length - 2] : null;
+
   // Podium
   const podiumEl = document.getElementById('podium');
   const medals = ['\u{1F947}', '\u{1F948}', '\u{1F949}'];
@@ -313,12 +285,20 @@ function render() {
   podiumEl.innerHTML = ranked.map((p, i) => {
     const ev = stats[p].totalEV;
     const actual = stats[p].actualScore;
+    const prevEV = prevSnapshot && prevSnapshot.evScores ? prevSnapshot.evScores[p] : null;
+    const delta = prevEV !== null ? ev - prevEV : null;
+    const deltaStr = delta !== null
+      ? `<div class="podium-delta" style="color:${delta >= 0 ? 'var(--green)' : 'var(--red)'}">
+           ${delta >= 0 ? '▲' : '▼'} ${Math.abs(delta).toFixed(1)} since Mar 8
+         </div>`
+      : '';
     return `
     <div class="podium-slot ${classes[i]}">
       <div class="rank-badge">${medals[i]}</div>
       <div class="podium-name" style="color:${PLAYER_COLORS[p]}">${PLAYER_NAMES[p]}</div>
       <div class="podium-score" style="color:${PLAYER_COLORS[p]}">${ev >= 0 ? '+' : ''}${ev.toFixed(1)}</div>
       <div class="podium-detail">Expected Value</div>
+      ${deltaStr}
       <div class="podium-actual" style="background:${PLAYER_COLORS[p]}20;color:${PLAYER_COLORS[p]}">
         Actual: ${actual >= 0 ? '+' : ''}${actual} &bull; ${stats[p].correct}/${resolved} correct
       </div>
@@ -328,10 +308,11 @@ function render() {
   // Stats bar
   const evSpread = stats[ranked[0]].totalEV - stats[ranked[2]].totalEV;
   const mostVolatile = findMostVolatileQuestion();
+  const changedCount = Object.values(PRIORS.priors).filter(p => p.changeFlag && p.reasoning && !p.reasoning.startsWith('Initial assessment')).length;
   document.getElementById('stats-bar').innerHTML = `
     <div class="stat-card"><div class="label">Questions Resolved</div><div class="value">${resolved} / ${totalQs}</div></div>
-    <div class="stat-card"><div class="label">EV Spread (1st-3rd)</div><div class="value">${evSpread.toFixed(1)}</div></div>
-    <div class="stat-card"><div class="label">Most Volatile Q</div><div class="value">${mostVolatile}</div></div>
+    <div class="stat-card"><div class="label">EV Spread (1st–3rd)</div><div class="value">${evSpread.toFixed(1)}</div></div>
+    <div class="stat-card"><div class="label">Priors Updated</div><div class="value" style="color:var(--gold)">${changedCount}</div></div>
     <div class="stat-card"><div class="label">EV Leader</div><div class="value" style="color:${PLAYER_COLORS[ranked[0]]}">${PLAYER_NAMES[ranked[0]]}</div></div>
   `;
 
@@ -352,12 +333,12 @@ function render() {
   renderChangeLog();
   renderChart();
   renderRiskProfiles(stats);
-  document.getElementById('last-updated').textContent = PRIORS.lastUpdated ? PRIORS.lastUpdated.split('T')[0] : 'Unknown';
+  document.getElementById('last-updated').textContent = PRIORS.lastUpdated || 'Unknown';
 }
 
 function findMostVolatileQuestion() {
   let maxSwing = 0;
-  let maxId = '\u2014';
+  let maxId = '—';
   GAME_DATA.questions.filter(q => !q.result).forEach(q => {
     const evs = PLAYERS.map(p => calcEV(q, p));
     const swing = Math.max(...evs) - Math.min(...evs);
@@ -372,9 +353,9 @@ function renderTable(cat) {
   tbody.innerHTML = qs.map(q => {
     const prior = PRIORS.priors[q.id];
     const isResolved = !!q.result;
+    const isChanged = prior && prior.changeFlag && prior.reasoning && !prior.reasoning.startsWith('Initial assessment');
 
-    // Probability display
-    let probDisplay = '\u2014';
+    let probDisplay = '—';
     let sourceDisplay = '';
     if (isResolved) {
       probDisplay = `<span class="ev-resolved">Resolved: ${q.result}</span>`;
@@ -392,23 +373,22 @@ function renderTable(cat) {
       }
       const srcClass = prior.source === 'resolved' ? 'market' : (prior.source || 'assessment');
       sourceDisplay = prior.source === 'resolved' ? '' : `<span class="source-badge ${srcClass}">${prior.source || 'assessment'}</span>`;
+      if (isChanged) sourceDisplay += ` <span class="source-badge" style="background:rgba(245,166,35,0.2);color:var(--gold);">↑ updated</span>`;
     }
 
-    // Player EV cells
     const playerCells = PLAYERS.map(p => {
       const ev = calcEV(q, p);
-      const evClass = isResolved ? (ev > 0 ? 'ev-pos' : ev < 0 ? 'ev-neg' : 'ev-zero') :
-        (ev > 0 ? 'ev-pos' : ev < 0 ? 'ev-neg' : 'ev-zero');
+      const evClass = ev > 0 ? 'ev-pos' : ev < 0 ? 'ev-neg' : 'ev-zero';
       return `<td>
         <div class="pick-cell">
           <div class="pick-val" style="color:${PLAYER_COLORS[p]}">${q[p].pick}</div>
-          <div class="pick-detail">${q[p].stake}\u00D7${q[p].mult}</div>
+          <div class="pick-detail">${q[p].stake}×${q[p].mult}</div>
           <div class="ev-cell ${evClass}">${ev >= 0 ? '+' : ''}${ev.toFixed(1)}</div>
         </div>
       </td>`;
     }).join('');
 
-    return `<tr>
+    return `<tr class="${isChanged ? 'changed-row' : ''}">
       <td><span class="q-id">${q.id}</span></td>
       <td>${q.text}</td>
       <td>${probDisplay}</td>
@@ -418,33 +398,21 @@ function renderTable(cat) {
   }).join('');
 }
 
-function getMainProbability(q, prior) {
-  const probs = prior.probabilities;
-  if (probs['Yes'] !== undefined) return probs['Yes'];
-  return Math.max(...Object.values(probs));
-}
-
 function renderChangeLog() {
   const entries = document.getElementById('change-entries');
   const changes = [];
   for (const [qId, prior] of Object.entries(PRIORS.priors)) {
     if (prior.changeFlag && prior.reasoning && !prior.reasoning.startsWith('Initial assessment')) {
       const q = GAME_DATA.questions.find(qq => qq.id === qId);
-      changes.push({
-        id: qId,
-        text: q ? q.text : qId,
-        reasoning: prior.reasoning,
-        date: prior.lastChanged,
-        probabilities: prior.probabilities
-      });
+      changes.push({ id: qId, text: q ? q.text : qId, reasoning: prior.reasoning, date: prior.lastChanged, probabilities: prior.probabilities });
     }
   }
 
   if (changes.length === 0) {
     const snapshotCount = (PRIORS.snapshots || []).length;
     entries.innerHTML = snapshotCount <= 1
-      ? '<div class="no-changes">Initial probabilities set on ' + (PRIORS.lastUpdated || '').split('T')[0] + '. Changes will appear here after the first weekly update.</div>'
-      : '<div class="no-changes">No significant probability shifts (>10pp) since last update.</div>';
+      ? `<div class="no-changes">Initial probabilities set on ${(PRIORS.lastUpdated || '').split('T')[0]}. Changes will appear here after the first weekly update.</div>`
+      : '<div class="no-changes">No significant probability shifts since last update.</div>';
     return;
   }
 
@@ -461,11 +429,14 @@ function renderChangeLog() {
   }).join('');
 }
 
+let evChart = null;
 function renderChart() {
   const snapshots = PRIORS.snapshots || [];
   if (snapshots.length < 1) return;
 
   const ctx = document.getElementById('ev-chart').getContext('2d');
+  if (evChart) evChart.destroy();
+
   const labels = snapshots.map(s => s.date);
   const datasets = PLAYERS.map(p => ({
     label: PLAYER_NAMES[p],
@@ -473,31 +444,30 @@ function renderChart() {
     borderColor: PLAYER_COLORS[p],
     backgroundColor: PLAYER_COLORS[p] + '20',
     tension: 0.3,
-    pointRadius: 4,
-    pointHoverRadius: 6,
+    pointRadius: 5,
+    pointHoverRadius: 7,
     borderWidth: 2,
     fill: false
   }));
 
-  new Chart(ctx, {
+  evChart = new Chart(ctx, {
     type: 'line',
     data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: {
-          labels: { color: '#8899b3', font: { family: 'Inter' } }
+        legend: { labels: { color: '#8899b3', font: { family: 'Inter' } } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}`
+          }
         }
       },
       scales: {
-        x: {
-          ticks: { color: '#8899b3', font: { family: 'JetBrains Mono', size: 11 } },
-          grid: { color: '#2d3f5a' }
-        },
+        x: { ticks: { color: '#8899b3', font: { family: 'JetBrains Mono', size: 11 } }, grid: { color: '#2d3f5a' } },
         y: {
-          ticks: { color: '#8899b3', font: { family: 'JetBrains Mono', size: 11 },
-            callback: v => (v >= 0 ? '+' : '') + v },
+          ticks: { color: '#8899b3', font: { family: 'JetBrains Mono', size: 11 }, callback: v => (v >= 0 ? '+' : '') + v },
           grid: { color: '#2d3f5a' }
         }
       }
@@ -507,7 +477,8 @@ function renderChart() {
 
 function renderRiskProfiles(stats) {
   const section = document.getElementById('risk-section');
-  section.innerHTML = PLAYERS.map(p => {
+  const ranked = [...PLAYERS].sort((a, b) => stats[b].totalEV - stats[a].totalEV);
+  section.innerHTML = ranked.map(p => {
     const s = stats[p];
     const unresolvedQs = GAME_DATA.questions.filter(q => !q.result);
     const posEVcount = unresolvedQs.filter(q => calcEV(q, p) > 0).length;
@@ -516,7 +487,7 @@ function renderRiskProfiles(stats) {
     <div class="risk-card">
       <h4 style="color:${PLAYER_COLORS[p]}">${PLAYER_NAMES[p]}'s EV Profile</h4>
       <div class="risk-stat"><span>Total EV</span><span class="val" style="color:${s.totalEV >= 0 ? 'var(--green)' : 'var(--red)'}">${s.totalEV >= 0 ? '+' : ''}${s.totalEV.toFixed(1)}</span></div>
-      <div class="risk-stat"><span>Locked Score (resolved)</span><span class="val">${s.actualScore >= 0 ? '+' : ''}${s.actualScore}</span></div>
+      <div class="risk-stat"><span>Locked score (resolved)</span><span class="val">${s.actualScore >= 0 ? '+' : ''}${s.actualScore}</span></div>
       <div class="risk-stat"><span>Projected from unresolved</span><span class="val">${s.unresolvedEV >= 0 ? '+' : ''}${s.unresolvedEV.toFixed(1)}</span></div>
       <div class="risk-stat"><span>Positive EV picks</span><span class="val" style="color:var(--green)">${posEVcount}</span></div>
       <div class="risk-stat"><span>Negative EV picks</span><span class="val" style="color:var(--red)">${negEVcount}</span></div>
@@ -529,7 +500,7 @@ function renderRiskProfiles(stats) {
 // ============================================================
 // INIT
 // ============================================================
-loadData();
+render();
 </script>
 </body>
 </html>
