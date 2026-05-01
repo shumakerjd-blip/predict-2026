@@ -43,10 +43,10 @@
       "changeFlag": true
     },
     "E6": {
-      "probabilities": {"Yes": 0.45, "No": 0.55},
+      "probabilities": {"Yes": 0.50, "No": 0.50},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Labor market update (April 2026): Tariff-driven slowdown creates elevated layoff risk in manufacturing, retail, logistics, and trade-exposed sectors. Goldman and JPMorgan revised unemployment forecasts to 4.5–5.0% by year-end under their base cases. What was a tail risk is now a modal outcome under pessimistic scenarios. Moving Yes from 25% to 45%.",
+      "reasoning": "Reevaluation (April 30): Late-April labor data confirms broad softening — JOLTS openings declining, weekly initial claims trending up, manufacturing PMI employment sub-index contracting. Goldman/JPMorgan base case forecasts of 4.5–5.0% by year-end now look credible. From a tariff-shock revision of 45%, raising another 5pp to 50% — coin-flip territory. Moving Yes from 45% to 50%.",
       "lastChanged": "2026-04-30",
       "changeFlag": true
     },
@@ -59,10 +59,10 @@
       "changeFlag": true
     },
     "E8": {
-      "probabilities": {"Yes": 0.45, "No": 0.55},
+      "probabilities": {"Yes": 0.50, "No": 0.50},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Risk-off update (April 2026): Bitcoin sold off sharply with the broader risk-off move in early April, briefly dropping below $80K before recovering. Crypto-friendly regulatory environment is still a tailwind, but macro uncertainty creates resistance to sustained highs. Slight downward revision from 50% to 45%.",
+      "reasoning": "Reevaluation (April 30): Bitcoin recovered above $90K after the early-April drawdown to ~$78K. Eight months remain for a year-end >$100K close, with continued institutional inflows and a crypto-friendly regulatory posture. Returning to neutral at 50% — the macro headwind and the structural tailwind appear to balance. Moving Yes from 45% to 50%.",
       "lastChanged": "2026-04-30",
       "changeFlag": true
     },
@@ -83,20 +83,20 @@
       "changeFlag": true
     },
     "P3": {
-      "probabilities": {"Yes": 0.20, "No": 0.80},
+      "probabilities": {"Yes": 0.18, "No": 0.82},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: Federal cases dropped post-election. Georgia case faces procedural delays. A final judgment in 2026 is unlikely given procedural posture.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): No prosecutorial movement of consequence in Q1; Georgia case still mired in procedural posture. With four months elapsed of the calendar year and no signal of an accelerating timeline, the window for a final 2026 judgment continues to narrow. Trimming Yes from 20% to 18%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "P4": {
-      "probabilities": {"Yes": 0.15, "No": 0.85},
+      "probabilities": {"Yes": 0.12, "No": 0.88},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: Criminal convictions take years to develop. A full conviction within 2026 is a high bar. Historical base rate is low.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): No public criminal indictments of senior administration officials announced in Q1. With DOJ leadership configured as it is and no visible investigative activity, the path to a 2026 conviction remains very narrow. Trimming Yes from 15% to 12%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "P5": {
       "probabilities": {"Yes": 1.0, "No": 0.0},
@@ -107,18 +107,18 @@
       "changeFlag": false
     },
     "P6": {
-      "probabilities": {"Yes": 0.10, "No": 0.90},
+      "probabilities": {"Yes": 0.08, "No": 0.92},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: Requires bipartisan cooperation (unlikely) or reconciliation (limited). Slim House majority makes partisan legislation difficult. Decades of legislative failure on immigration.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): The 2026 government shutdown earlier this year underscored how dysfunctional the legislative-leadership relationship is. With midterm campaigning intensifying and no bipartisan immigration coalition forming, prospects for major immigration legislation are even lower than the initial 10%. Moving Yes from 10% to 8%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "P7": {
-      "probabilities": {"Yes": 0.30, "No": 0.70},
+      "probabilities": {"Yes": 0.25, "No": 0.75},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Economic headwinds update (April 2026): The tariff shock and resulting economic dislocation are historically devastating for the president's party in midterms. The prior 35% accounted for structural midterm losses; the current economic environment — rising prices, falling markets, recession fear — materially strengthens Democratic tailwinds. Moving Yes from 35% to 30%.",
+      "reasoning": "Reevaluation (April 30): The economic environment continues to deteriorate for the ruling party — falling markets, rising prices, recession fear, no immigration deliverable, and a recent shutdown all compound. Generic ballot polling has moved several points toward Democrats since January. Combining the structural midterm headwind with the macro overlay, House retention odds have slipped further. Moving Yes from 30% to 25%.",
       "lastChanged": "2026-04-30",
       "changeFlag": true
     },
@@ -131,36 +131,36 @@
       "changeFlag": false
     },
     "A1": {
-      "probabilities": {"Yes": 0.55, "No": 0.45},
-      "source": "assessment",
+      "probabilities": {"Yes": 1.0, "No": 0.0},
+      "source": "resolved",
       "marketSource": null,
-      "reasoning": "Initial assessment: ChatGPT had ~400M MAU in early 2025, growing rapidly. Meta AI embedded in WhatsApp/Instagram is the most likely path to 500M WAU.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "RESOLVED: ChatGPT publicly disclosed 700M+ weekly active users earlier in 2026, and Meta AI surpassed 500M WAU through WhatsApp/Instagram integration. Both threshold conditions met independently.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "A2": {
-      "probabilities": {"Yes": 0.50, "No": 0.50},
+      "probabilities": {"Yes": 0.45, "No": 0.55},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: Character.AI and Replika show strong downloads but sustaining top-10 against TikTok/Instagram is very hard. A viral moment could spike for one month.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): Four months in, no AI companion app has cracked the App Store top-10 overall. Character.AI and Replika continue to chart in their categories but compete for top-10 against TikTok, Instagram, ChatGPT, and Threads. Sustaining a top-10 position requires more than a viral spike. Trimming Yes from 50% to 45%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "A3": {
-      "probabilities": {"Yes": 0.60, "No": 0.40},
+      "probabilities": {"Yes": 0.65, "No": 0.35},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Geopolitical AI update (April 2026): Deepfake incidents are accelerating globally. Heightened tensions in multiple theaters (Taiwan Strait, Eastern Europe) increase the operational temptation to use synthetic media in disinformation campaigns. Technology improving faster than detection. Moving Yes from 55% to 60%.",
+      "reasoning": "Reevaluation (April 30): Multiple deepfake incidents in Q1 already targeted European elections and a Taiwan Strait disinformation episode. Detection still trails generation. With midterms approaching and ongoing geopolitical flashpoints, the operational temptation continues to climb. Moving Yes from 60% to 65%.",
       "lastChanged": "2026-04-30",
       "changeFlag": true
     },
     "A4": {
-      "probabilities": {"Yes": 0.82, "No": 0.18},
+      "probabilities": {"Yes": 0.90, "No": 0.10},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: EU AI Act transparency obligations scheduled for implementation. China already requires AI content labeling. Very likely in at least one major jurisdiction.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): EU AI Act Article 50 transparency obligations enter force in August 2026, requiring labeling of AI-generated content in major jurisdictions. China's labeling rules are already operational. Path to resolution is now near-certain absent a delay. Moving Yes from 82% to 90%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "A5": {
       "probabilities": {"Yes": 0.10, "No": 0.90},
@@ -171,12 +171,12 @@
       "changeFlag": false
     },
     "A6": {
-      "probabilities": {"Yes": 0.60, "No": 0.40},
+      "probabilities": {"Yes": 0.55, "No": 0.45},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: Character.AI teen safety controversy generated congressional attention. Political salience of AI companion risks to children makes this moderately likely.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): Congressional schedule packed with appropriations and tariff-related oversight; no committee has yet noticed a hearing with 'AI companions' in the title. Topic has political salience, but the specific terminology requirement is a high bar. Trimming Yes from 60% to 55%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "F1": {
       "probabilities": {"A": 0.08, "B": 0.25, "C": 0.15, "D": 0.30, "E": 0.15, "F": 0.07},
@@ -307,12 +307,12 @@
       "changeFlag": false
     },
     "G1J": {
-      "probabilities": {"Yes": 0.35, "No": 0.65},
+      "probabilities": {"Yes": 0.40, "No": 0.60},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: Justin lost 90lbs, actively training, early-to-mid 40s at ~17% BF. A 6:00 mile is serious — requires dedicated run-specific training beyond his current general fitness regimen.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): Justin has had four months of training cycle since the goal was set. Given his demonstrated discipline (90lb cut, alcohol cessation) and a seven-month runway to Nov 30, the base rate for a sub-6:00 mile from a fit 40-something climbs modestly with each maintained training month. Moving Yes from 35% to 40%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "G2J": {
       "probabilities": {"Yes": 0.50, "No": 0.50},
@@ -331,12 +331,12 @@
       "changeFlag": false
     },
     "G2BA": {
-      "probabilities": {"Yes": 0.30, "No": 0.70},
+      "probabilities": {"Yes": 0.25, "No": 0.75},
       "source": "assessment",
       "marketSource": null,
-      "reasoning": "Initial assessment: Quitting daily news consumption is hard — news is designed to be addictive, especially during midterm election season. Base rate for sustained behavioral change is low.",
-      "lastChanged": "2026-03-08",
-      "changeFlag": false
+      "reasoning": "Reevaluation (April 30): Midterm season ramping up over the next six months will compound the difficulty of staying off the daily news cycle — the political news environment becomes more pull-stronger, not less. Combined with the low base rate for sustained behavioral change in news consumption, trimming further. Moving Yes from 30% to 25%.",
+      "lastChanged": "2026-04-30",
+      "changeFlag": true
     },
     "G1BE": {
       "probabilities": {"Yes": 0.45, "No": 0.55},
@@ -415,23 +415,23 @@
         "E3": {"Yes": 0.20, "No": 0.80},
         "E4": {"Yes": 0.35, "No": 0.65},
         "E5": {"Yes": 0.38, "No": 0.62},
-        "E6": {"Yes": 0.45, "No": 0.55},
+        "E6": {"Yes": 0.50, "No": 0.50},
         "E7": {"Yes": 0.42, "No": 0.58},
-        "E8": {"Yes": 0.45, "No": 0.55},
+        "E8": {"Yes": 0.50, "No": 0.50},
         "P1": {"Yes": 1.0, "No": 0.0},
         "P2": {"Yes": 0.70, "No": 0.30},
-        "P3": {"Yes": 0.20, "No": 0.80},
-        "P4": {"Yes": 0.15, "No": 0.85},
+        "P3": {"Yes": 0.18, "No": 0.82},
+        "P4": {"Yes": 0.12, "No": 0.88},
         "P5": {"Yes": 1.0, "No": 0.0},
-        "P6": {"Yes": 0.10, "No": 0.90},
-        "P7": {"Yes": 0.30, "No": 0.70},
+        "P6": {"Yes": 0.08, "No": 0.92},
+        "P7": {"Yes": 0.25, "No": 0.75},
         "P8": {"Yes": 0.70, "No": 0.30},
-        "A1": {"Yes": 0.55, "No": 0.45},
-        "A2": {"Yes": 0.50, "No": 0.50},
-        "A3": {"Yes": 0.60, "No": 0.40},
-        "A4": {"Yes": 0.82, "No": 0.18},
+        "A1": {"Yes": 1.0, "No": 0.0},
+        "A2": {"Yes": 0.45, "No": 0.55},
+        "A3": {"Yes": 0.65, "No": 0.35},
+        "A4": {"Yes": 0.90, "No": 0.10},
         "A5": {"Yes": 0.10, "No": 0.90},
-        "A6": {"Yes": 0.60, "No": 0.40},
+        "A6": {"Yes": 0.55, "No": 0.45},
         "F1": {"A": 0.08, "B": 0.25, "C": 0.15, "D": 0.30, "E": 0.15, "F": 0.07},
         "F2": {"A": 0.30, "B": 0.10, "C": 0.12, "D": 0.28, "E": 0.08, "F": 0.12},
         "F3": {"A": 0.30, "B": 0.25, "C": 0.15, "D": 0.08, "E": 0.07, "F": 0.15},
@@ -448,27 +448,36 @@
         "S3": {"Avalanche": 0.12, "Other": 0.88},
         "S4": {"Yes": 0.55, "No": 0.45},
         "S5": {"B": 1.0},
-        "G1J": {"Yes": 0.35, "No": 0.65},
+        "G1J": {"Yes": 0.40, "No": 0.60},
         "G2J": {"Yes": 0.50, "No": 0.50},
         "G1BA": {"Yes": 0.55, "No": 0.45},
-        "G2BA": {"Yes": 0.30, "No": 0.70},
+        "G2BA": {"Yes": 0.25, "No": 0.75},
         "G1BE": {"Yes": 0.45, "No": 0.55},
         "G2BE": {"Yes": 0.55, "No": 0.45}
       },
-      "evScores": {"justin": 80.4, "barry": 100.0, "ben": 32.8},
+      "evScores": {"justin": 80.9, "barry": 132.4, "ben": 79.3},
       "changes": [
+        "A1: RESOLVED Yes — ChatGPT 700M+ WAU and Meta AI 500M+ WAU both cleared the threshold",
         "E1: Yes 35%→60% — Liberation Day tariff shock, GDP forecasts slashed, recession now more likely than not",
         "E2: Yes 30%→55% — Tariff pass-through makes 3.5%+ CPI more likely than not",
         "E3: Yes 40%→20% — Fed locked in stagflation trap, two cuts in 2026 now unlikely",
         "E4: Yes 40%→35% — Recession demand destruction dampening oil prices",
         "E5: Yes 50%→38% — S&P dropped ~15% post-tariffs, materially below Jan 1 baseline",
-        "E6: Yes 25%→45% — Tariff slowdown elevates unemployment toward 4.5-5.0% forecasts",
+        "E6: Yes 25%→50% — Tariff slowdown plus April labor-data softening push unemployment toward coin-flip on 4.5% threshold",
         "E7: Yes 30%→42% — Fed on hold longer, yields elevated, mortgage rates drifting up",
-        "E8: Yes 50%→45% — Risk-off environment creates crypto headwinds despite regulatory tailwind",
+        "E8: Yes 50%→50% — Bitcoin recovered above $90K; structural tailwinds and macro headwinds rebalance to neutral",
         "P2: Yes 65%→70% — SCOTUS accepted key removal-power and agency-deference cases this term",
-        "P7: Yes 35%→30% — Economic dislocation strengthens midterm headwinds for ruling party",
-        "A3: Yes 55%→60% — Deepfake incidents accelerating, geopolitical tensions elevating operational temptation",
-        "G2J: Yes 40%→50% — Two additional months of nicotine cessation track record warrants Bayesian update"
+        "P3: Yes 20%→18% — No prosecutorial movement in Q1; window for 2026 final judgment narrowing",
+        "P4: Yes 15%→12% — No public indictments of senior officials; investigative posture remains dormant",
+        "P6: Yes 10%→8% — Recent shutdown plus midterm campaigning all but eliminate immigration-deal odds",
+        "P7: Yes 35%→25% — Economic dislocation, shutdown, and generic-ballot drift compound midterm headwinds",
+        "A2: Yes 50%→45% — No AI companion app in App Store top-10 four months in",
+        "A3: Yes 55%→65% — Q1 deepfake incidents in Europe and Taiwan Strait theater confirm acceleration",
+        "A4: Yes 82%→90% — EU AI Act Article 50 enters force August 2026, near-certain absent delay",
+        "A6: Yes 60%→55% — Congressional schedule packed; specific 'AI companions' terminology a high bar",
+        "G1J: Yes 35%→40% — Four months of maintained training plus seven-month runway to Nov 30",
+        "G2J: Yes 40%→50% — Two additional months of nicotine cessation track record warrants Bayesian update",
+        "G2BA: Yes 30%→25% — Midterm season will compound the pull of the daily news cycle"
       ]
     }
   ]
